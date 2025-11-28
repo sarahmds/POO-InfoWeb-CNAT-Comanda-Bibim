@@ -1,97 +1,113 @@
 # Documento de Visão
 
 ## Histórico de Revisões
+
 | Data | Versão | Descrição | Autores |
-| :--: | :----: | --------- | :------ |
+| :--: | :----: | :-------: | :------: |
 | 27/11/25 | 1.0 | Versão inicial | Gabriel Carrilho da Silva, Sarah Medeiros dos Santos, Emilly Yasmim Batista da Conceição |
 
-## 1. Objetivo do projeto
-Sistema para gerenciar mesas, pedidos e cardápio, permitindo controle eficiente por gerente, garçom e chef.
+---
 
+## 1. Objetivo do projeto
+
+Implementação de um sistema web para gerenciamento de mesas, pedidos e cardápio de um restaurante, permitindo controle eficiente das operações por gerente, garçom e chef. O sistema utilizará SQLite para persistência dos dados.
+
+---
 
 ## 2. Descrição do problema
-| Item | Descrição |
-|------|-----------|
-| Problema | Falta de organização no controle de mesas, pedidos e preparo. |
-| Afeta | Gerentes, garçons e chefs. |
-| Impacta | Atrasos, erros, baixa eficiência. |
-| Solução | Sistema com gerenciamento de mesas, pedidos e cardápio integrado ao SQLite. |
 
-## 3. Usuários e Funcionalidades
+|    |    |
+| -- | -- |
+| **Problema** | Falta de organização no controle de mesas, pedidos e preparo. |
+| **Afeta** | Gerentes, garçons e chefs. |
+| **Impacta** | Atrasos, erros, baixa eficiência e dificuldade no acompanhamento do fluxo de trabalho. |
+| **Solução** | Desenvolvimento de um sistema integrado para gerenciar mesas, pedidos, cardápio e preparo, com armazenamento em SQLite. |
 
-### Gerente
-Responsabilidades: administração geral.  
-Funcionalidades:  
-- Cadastro de usuários  
-- gerenciar mesas  
-- gerenciar pratos  
-- Consulta de mesas  
-- Consulta de cardápio  
-- Pesquisar por (mesas/pratos/pedidos)  
-- visualizar gráfico
+---
 
-### Garçom
-Responsabilidades: atendimento ao cliente.  
-Funcionalidades:  
-- Consultar mesas  
-- Ocupação e liberação de mesa  
-- Criar pedidos vinculados à mesa  
-- Adicionar itens ao pedido  
-- Enviar pedido para o chef  
-- Listar pedidos em aberto por mesa  
+## 3. Descrição dos usuários
 
-### Chef
-Responsabilidades: preparo dos pratos.  
-Funcionalidades:  
-- Visualizar pedidos enviados  
-- Atualizar status do preparo  
-- Finalizar pedidos  
+| Nome | Descrição | Responsabilidade |
+| :--: | :-------: | :--------------: |
+| **Gerente** | administrador geral do sistema | cadastrar usuários, gerenciar cardápio, gerenciar mesas e visualizar relatórios |
+| **Garçom** | funcionário responsável pelo atendimento | gerenciar ocupação das mesas, criar pedidos e enviá-los à cozinha |
+| **Chef** | responsável pelo preparo dos pratos | visualizar pedidos enviados, atualizar status e finalizar preparo |
 
+---
 
-## 4. Ambiente dos usuários
-Sistema web em Streamlit, acessado em dispositivos do restaurante.  
-SQLite armazenará mesas, usuários, pratos, pedidos e itens.
+## 4. Descrição do ambiente dos usuários
 
+O sistema será acessado via navegador em dispositivos do restaurante, como computadores, tablets ou celulares.  
+O banco de dados SQLite armazenará informações de mesas, usuários, pratos, pedidos e itens.
+
+---
 
 ## 5. Principais necessidades dos usuários
-1. Consultar mesas  
-2. Registrar mesas  
-3. Consultar cardápio  
-4. Registrar pratos  
-5. Criar e gerenciar pedidos  
-6. Enviar pedidos para cozinha  
-7. Atualizar status de preparo  
-8. Gerar relatórios com gráficos  
+
+1. **Gerente**
+   - cadastrar usuários  
+   - gerenciar mesas  
+   - gerenciar cardápio  
+   - consultar mesas e cardápio  
+   - realizar pesquisas  
+   - visualizar gráficos e relatatórios  
+
+2. **Garçom**
+   - consultar mesas  
+   - ocupar e liberar mesas  
+   - criar pedidos  
+   - adicionar itens a pedidos  
+   - enviar pedidos para cozinha  
+   - listar pedidos por mesa  
+
+3. **Chef**
+   - visualizar pedidos enviados  
+   - atualizar status de preparo  
+   - finalizar pedidos  
+
+---
 
 ## 6. Alternativas concorrentes
-Consumer: mesas, pedidos, cardápio e emissão fiscal.  
-Colibri: controle de mesas, pedidos, PDV e relatórios.
 
+1. **Consumer**
+   - gerenciamento de mesas, pedidos, cardápio  
+   - emissão fiscal integrada  
+   - solução robusta para estabelecimentos maiores  
+
+2. **Colibri**
+   - controle de mesas e pedidos  
+   - PDV integrado  
+   - geração de relatórios operacionais  
+
+---
 
 ## 7. Requisitos Funcionais
-| Código | Requisito | Descrição | Prioridade | Usuário |
-| :----: | -------- | --------- | :--------: | :------ |
-| RF01 | Cadastro de Usuário | Registrar usuários com perfis. | Alta | Gerente |
-| RF02 | Login | Autenticação com perfil. | Alta | Todos |
-| RF03 | gerenciar Mesas | Criar, editar, listar, excluir mesas. | Alta | Gerente |
-| RF04 | gerenciar Pratos | Criar, editar, listar, excluir pratos. | Alta | Gerente |
-| RF05 | Consulta Mesas | Visualizar mesas e status. | Alta | Gerente, Garçom |
-| RF06 | Ocupação de Mesa | Marcar/liberar mesa. | Alta | Garçom |
-| RF07 | Criar Pedido | Pedido vinculado à mesa. | Alta | Garçom |
-| RF08 | Adicionar Itens | Inserir pratos no pedido. | Alta | Garçom |
-| RF09 | Envio para Cozinha | Pedido muda para “enviado”. | Alta | Garçom |
-| RF10 | Pedidos da Cozinha | Visualizar pendentes. | Alta | Chef |
-| RF11 | Atualizar Status | Atualizar preparo. | Alta | Chef |
-| RF12 | Lista por Mesa | Ver pedidos em aberto. | Média | Garçom |
-| RF13 | Pesquisa Parcial | Buscar mesas ou pratos. | Média | Gerente |
-| RF14 | Relatórios | Exibir gráficos. | Média | Gerente |
-| RF15 | Persistência | Registro no SQLite. | Alta | Todos |
 
+| Código | Nome | Descrição | Prioridade |
+| :----: | :--: | :-------: | :--------: |
+| RF01 | Cadastro de usuários | Registrar usuários com perfis específicos (gerente/garçom/chef) | alta |
+| RF02 | Login | Autenticação com perfil e controle de acesso | alta |
+| RF03 | Gerenciar mesas | Criar, editar, listar e excluir mesas | alta |
+| RF04 | Gerenciar pratos | Criar, editar, listar e excluir pratos | alta |
+| RF05 | Consulta de mesas | Visualizar mesas e status (livre/ocupada) | alta |
+| RF06 | Ocupação de mesa | Marcar ou liberar mesas | alta |
+| RF07 | Criar pedido | Criar pedido vinculado a uma mesa | alta |
+| RF08 | Adicionar itens ao pedido | Inserir pratos no pedido existente | alta |
+| RF09 | Envio para cozinha | Pedido muda para status “enviado” | alta |
+| RF10 | Pedidos da cozinha | Listar pedidos pendentes para preparo | alta |
+| RF11 | Atualizar status | Alterar status conforme preparo | alta |
+| RF12 | Listar pedidos por mesa | Exibir pedidos em aberto de uma mesa | média |
+| RF13 | Pesquisa parcial | Busca de mesas, pratos ou pedidos | média |
+| RF14 | Relatórios | Exibir gráficos e estatísticas | média |
+| RF15 | Persistência | Registrar e recuperar dados via SQLite | alta |
+
+---
 
 ## 8. Requisitos Não-funcionais
+
 | Código | Nome | Descrição | Categoria | Classificação |
-| :----: | ---- | --------- | --------- | :-----------: |
-| RNF01 | Performance | Páginas carregam em até 2s. | Desempenho | Essencial |
-| RNF02 | Usabilidade | Interface simples. | Usabilidade | Essencial |
-| RNF03 | Portabilidade | Acesso via navegador. | Técnica | Importante |
-| RNF04 | Persistência | Uso de SQLite. | Técnica | Essencial |
+| :----: | :--: | :-------: | :-------: | :-----------: |
+| RNF01 | Performance | Páginas devem carregar em até 2 segundos | desempenho | essencial |
+| RNF02 | Usabilidade | Interface simples e intuitiva | usabilidade | essencial |
+| RNF03 | Portabilidade | Acesso via qualquer navegador | técnica | importante |
+| RNF04 | Persistência | Utilização do SQLite para armazenamento | técnica | essencial |
