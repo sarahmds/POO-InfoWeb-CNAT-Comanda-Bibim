@@ -6,13 +6,11 @@
 | :--: | :----: | :-------: | :------: |
 | 27/11/25 | 1.0 | Versão inicial | Gabriel Carrilho da Silva, Sarah Medeiros dos Santos, Emilly Yasmim Batista da Conceição |
 
----
 
 ## 1. Objetivo do projeto
 
 Implementação de um sistema web para gerenciamento de mesas, pedidos e cardápio de um restaurante, permitindo controle eficiente das operações por gerente, garçom e chef. O sistema utilizará SQLite para persistência dos dados.
 
----
 
 ## 2. Descrição do problema
 
@@ -23,7 +21,6 @@ Implementação de um sistema web para gerenciamento de mesas, pedidos e cardáp
 | **Impacta** | Atrasos, erros, baixa eficiência e dificuldade no acompanhamento do fluxo de trabalho. |
 | **Solução** | Desenvolvimento de um sistema integrado para gerenciar mesas, pedidos, cardápio e preparo, com armazenamento em SQLite. |
 
----
 
 ## 3. Descrição dos usuários
 
@@ -33,14 +30,12 @@ Implementação de um sistema web para gerenciamento de mesas, pedidos e cardáp
 | **Garçom** | funcionário responsável pelo atendimento | gerenciar ocupação das mesas, criar pedidos e enviá-los à cozinha |
 | **Chef** | responsável pelo preparo dos pratos | visualizar pedidos enviados, atualizar status e finalizar preparo |
 
----
 
 ## 4. Descrição do ambiente dos usuários
 
 O sistema será acessado via navegador em dispositivos do restaurante, como computadores, tablets ou celulares.  
 O banco de dados SQLite armazenará informações de mesas, usuários, pratos, pedidos e itens.
 
----
 
 ## 5. Principais necessidades dos usuários
 
@@ -65,7 +60,6 @@ O banco de dados SQLite armazenará informações de mesas, usuários, pratos, p
    - atualizar status de preparo  
    - finalizar pedidos  
 
----
 
 ## 6. Alternativas concorrentes
 
@@ -79,7 +73,6 @@ O banco de dados SQLite armazenará informações de mesas, usuários, pratos, p
    - PDV integrado  
    - geração de relatórios operacionais  
 
----
 
 ## 7. Requisitos Funcionais
 
@@ -101,7 +94,6 @@ O banco de dados SQLite armazenará informações de mesas, usuários, pratos, p
 | RF14 | Relatórios | Exibir gráficos e estatísticas | média |
 | RF15 | Persistência | Registrar e recuperar dados via SQLite | alta |
 
----
 
 ## 8. Requisitos Não-funcionais
 
