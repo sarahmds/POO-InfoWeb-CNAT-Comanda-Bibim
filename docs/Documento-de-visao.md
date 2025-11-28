@@ -63,7 +63,6 @@ O banco de dados SQLite armazenará informações de mesas, usuários, pratos, p
 - Login
 - Listar pedidos na cozinha
 -  Atualizar status do pedido
--  Pesquisa geral
 
 ## 6. Alternativas concorrentes
 
