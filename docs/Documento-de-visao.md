@@ -39,28 +39,31 @@ O banco de dados SQLite armazenará informações de mesas, usuários, pratos, p
 
 ## 5. Principais necessidades dos usuários
 
-1. **Gerente**
-   - gerenciar dia
-   - cadastrar usuários  
-   - gerenciar mesas  
-   - gerenciar cardápio  
-   - consultar mesas e cardápio  
-   - realizar pesquisas  
-   - visualizar gráficos 
 
-3. **Garçom**
-   - consultar mesas  
-   - ocupar e liberar mesas  
-   - criar pedidos  
-   - adicionar itens a pedidos  
-   - enviar pedidos para cozinha  
-   - listar pedidos por mesa  
+### 1. Gerente
+- Cadastro de usuários
+- Login
+- gerenciar dia
+- Gerenciar mesas
+- Gerenciar cardápio 
+- Consultar mesas
+- Pesquisa geral
+- Relatório do dia 
+### 2. Garçom
+- Login
+- Consultar mesas  
+- Ocupar e liberar mesas
+- Criar pedido
+- Adicionar itens ao pedido
+- Enviar pedido para cozinha
+- Listar pedidos por mesa
+- Pesquisa geral
 
-4. **Chef**
-   - visualizar pedidos enviados  
-   - atualizar status de preparo  
-   - finalizar pedidos  
-
+### 3. Chef
+- Login
+- Listar pedidos na cozinha
+-  Atualizar status do pedido
+-  Pesquisa geral
 
 ## 6. Alternativas concorrentes
 
@@ -77,23 +80,23 @@ O banco de dados SQLite armazenará informações de mesas, usuários, pratos, p
 
 ## 7. Requisitos Funcionais
 
-| Código | Nome | Descrição | Prioridade |
-| :----: | :--: | :-------: | :--------: |
-| RF01 | Cadastro de usuários | Registrar usuários com perfis específicos (gerente/garçom/chef) | alta |
-| RF02 | Login | Autenticação com perfil e controle de acesso | alta |
-| RF03 | gerenciar dia | abrir e feochar o dia no sistema | alta |
-| RF04 | Gerenciar mesas | Criar, editar, listar e excluir mesas | alta |
-| RF05 | Gerenciar pratos | Criar, editar, listar e excluir pratos | alta |
-| RF06 | Consulta de mesas | Visualizar mesas e status (livre/ocupada) | alta |
-| RF07 | Ocupação de mesa | Marcar ou liberar mesas | alta |
-| RF08 | Criar pedido | Criar pedido vinculado a uma mesa | alta |
-| RF09 | Adicionar itens ao pedido | Inserir pratos no pedido existente | alta |
-| RF10 | Envio para cozinha | Pedido muda para status “enviado” | alta |
-| RF11 | Pedidos da cozinha | Listar pedidos pendentes para preparo | alta |
-| RF12 | Atualizar status | Alterar status conforme preparo | alta |
-| RF13 | Listar pedidos por mesa | Exibir pedidos em aberto de uma mesa | média |
-| RF14 | Pesquisa parcial | Busca de mesas, pratos ou pedidos | média |
-| RF15 | Relatórios | Exibir gráficos de vendas por dia| média |
+| Código | Nome| Descrição| Prioridade|
+|-------|---------------------------|------------------------------------------------------------|------------|
+| RF01  | Cadastro de usuários| Registrar usuários com perfis (gerente, garçom, chef)| alta|
+| RF02  | Login| Autenticação e controle de acesso| alta|
+| RF03  | Gerenciar dia| Abrir e fechar o dia no sistema| alta|
+| RF04  | Gerenciar mesas| Criar, editar, listar e excluir mesas| alta|
+| RF05  | Gerenciar cardápio| Criar, editar, listar e excluir pratos| alta|
+| RF06  | Consultar mesas| Visualizar lista e status das mesas| alta|
+| RF07  | Ocupar e liberar mesas| Alterar status da mesa (livre/ocupada)| alta|
+| RF08  | Criar pedido| Registrar pedido vinculado à mesa| alta|
+| RF09  | Adicionar itens ao pedido| Inserir pratos em pedido existente| alta|
+| RF10  | Enviar pedido para cozinha| Alterar status do pedido para “enviado”| alta|
+| RF11  | Listar pedidos na cozinha | Exibir pedidos pendentes para preparo| alta|
+| RF12  | Atualizar status do pedido| Atualizar status (em preparo/concluído)| alta|
+| RF13  | Listar pedidos por mesa| Exibir pedidos de uma mesa específica| média|
+| RF14  | Pesquisa geral| Buscar mesas, pratos ou pedidos| média|
+| RF15  | Relatório do dia| Exibir gráficos de vendas| alta|
 
 
 ## 8. Requisitos Não-funcionais
