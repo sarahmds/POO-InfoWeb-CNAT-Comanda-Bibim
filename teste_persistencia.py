@@ -6,7 +6,7 @@ print("=== TESTE DE PERSISTÊNCIA ===")
 
 Database.criar_tabelas()
 
-prato = Prato(0, "Pizza", "Italiana", 35.0)
+prato = Prato(0, "kimchi", "Coreano", 35.0)
 PratoDAO.inserir(prato)
 print("Prato salvo no banco.")
 
