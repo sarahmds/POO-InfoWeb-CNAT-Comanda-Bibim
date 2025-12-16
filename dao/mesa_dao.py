@@ -7,10 +7,10 @@ class MesaDAO(DAO):
     def inserir(cls, obj):
         cls.abrir()
         sql = """
-            INSERT INTO mesa (numero, lugares, situacao)
+            INSERT INTO mesa (numero, , situacao)
             VALUES (?, ?, ?)
         """
-        cls.execute(sql, (obj.get_numero(), obj.get_lugares(), obj.get_situacao()))
+        cls.execute(sql, (obj.get_numero(), obj.get_situacao()))
         cls.fechar()
 
     @classmethod
@@ -19,7 +19,7 @@ class MesaDAO(DAO):
         sql = "SELECT * FROM mesa"
         cursor = cls.execute(sql)
         rows = cursor.fetchall()
-        objs = [Mesa(id, numero, lugares, situacao) for (id, numero, lugares, situacao) in rows]
+        objs = [Mesa(id, numero, situacao) for (id, numero, situacao) in rows]
         cls.fechar()
         return objs
 
@@ -37,10 +37,10 @@ class MesaDAO(DAO):
     def atualizar(cls, obj):
         cls.abrir()
         sql = """
-            UPDATE mesa SET numero=?, lugares=?, situacao=?
+            UPDATE mesa SET numero=?, situacao=?
             WHERE id=?
         """
-        cls.execute(sql, (obj.get_numero(), obj.get_lugares(), obj.get_situacao(), obj.get_id()))
+        cls.execute(sql, (obj.get_numero(), obj.get_situacao(), obj.get_id()))
         cls.fechar()
 
     @classmethod

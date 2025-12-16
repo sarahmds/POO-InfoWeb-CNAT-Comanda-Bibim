@@ -12,7 +12,7 @@ class UsuarioDAO:
         con = self.conectar()
         cur = con.cursor()
         cur.execute("""
-            INSERT INTO usuarios (nome, email, senha, perfil)
+            INSERT INTO usuario (nome, email, senha, perfil)
             VALUES (?, ?, ?, ?)
         """, (usuario.get_nome(), usuario.get_email(), usuario.get_senha(), usuario.get_perfil()))
         con.commit()
@@ -21,7 +21,7 @@ class UsuarioDAO:
     def listar_todos(self):
         con = self.conectar()
         cur = con.cursor()
-        cur.execute("SELECT id, nome, email, senha, perfil FROM usuarios")
+        cur.execute("SELECT id, nome, email, senha, perfil FROM usuario")
         rows = cur.fetchall()
         con.close()
 
@@ -30,7 +30,7 @@ class UsuarioDAO:
     def buscar_por_email(self, email):
         con = self.conectar()
         cur = con.cursor()
-        cur.execute("SELECT id, nome, email, senha, perfil FROM usuarios WHERE email = ?", (email,))
+        cur.execute("SELECT id, nome, email, senha, perfil FROM usuario WHERE email = ?", (email,))
         row = cur.fetchone()
         con.close()
         if row:
@@ -41,7 +41,7 @@ class UsuarioDAO:
         con = self.conectar()
         cur = con.cursor()
         cur.execute("""
-            UPDATE usuarios
+            UPDATE usuario
             SET nome = ?, email = ?, senha = ?, perfil = ?
             WHERE id = ?
         """, (usuario.get_nome(), usuario.get_email(), usuario.get_senha(), usuario.get_perfil(), usuario.get_id()))
@@ -51,6 +51,6 @@ class UsuarioDAO:
     def excluir(self, id_usuario):
         con = self.conectar()
         cur = con.cursor()
-        cur.execute("DELETE FROM usuarios WHERE id = ?", (id_usuario,))
+        cur.execute("DELETE FROM usuario WHERE id = ?", (id_usuario,))
         con.commit()
         con.close()

@@ -7,19 +7,19 @@ class ItemPedidoDAO(DAO):
     def inserir(cls, obj):
         cls.abrir()
         sql = """
-            INSERT INTO itempedido (id_pedido, id_produto, quantidade, subtotal)
+            INSERT INTO item_pedido (id_pedido, id_prato, quantidade, subtotal)
             VALUES (?, ?, ?, ?)
         """
         cls.execute(sql, (
-            obj.get_id_pedido(), obj.get_id_produto(),
-            obj.get_quantidade(), obj.get_subtotal()
+            obj.get_id_pedido(), obj.get_prato().get_id(),
+            obj.get_quantidade(), obj.subtotal()
         ))
         cls.fechar()
 
     @classmethod
     def listar_por_pedido(cls, id_pedido):
         cls.abrir()
-        sql = "SELECT * FROM itempedido WHERE id_pedido=?"
+        sql = "SELECT * FROM item_pedido WHERE id_pedido=?"
         cursor = cls.execute(sql, (id_pedido,))
         rows = cursor.fetchall()
         objs = [

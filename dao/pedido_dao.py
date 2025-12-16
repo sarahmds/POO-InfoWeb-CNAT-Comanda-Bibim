@@ -7,12 +7,12 @@ class PedidoDAO(DAO):
     def inserir(cls, obj):
         cls.abrir()
         sql = """
-            INSERT INTO pedido (data, total, estado, id_cliente, id_mesa)
+            INSERT INTO pedido (data, total, estado, id_usuario, id_mesa)
             VALUES (?, ?, ?, ?, ?)
         """
         cls.execute(sql, (
             obj.get_data(), obj.get_total(), obj.get_estado(),
-            obj.get_id_cliente(), obj.get_id_mesa()
+            obj.get_id_usuario(), obj.get_id_mesa()
         ))
         cls.fechar()
 
@@ -23,8 +23,8 @@ class PedidoDAO(DAO):
         cursor = cls.execute(sql)
         rows = cursor.fetchall()
         objs = [
-            Pedido(id, data, total, estado, id_cliente, id_mesa)
-            for (id, data, total, estado, id_cliente, id_mesa) in rows
+            Pedido(id, data, total, estado, id_usuario, id_mesa)
+            for (id, data, total, estado, id_usuario, id_mesa) in rows
         ]
         cls.fechar()
         return objs
@@ -43,12 +43,12 @@ class PedidoDAO(DAO):
     def atualizar(cls, obj):
         cls.abrir()
         sql = """
-            UPDATE pedido SET data=?, total=?, estado=?, id_cliente=?, id_mesa=?
+            UPDATE pedido SET data=?, total=?, estado=?, id_usuario=?, id_mesa=?
             WHERE id=?
         """
         cls.execute(sql, (
             obj.get_data(), obj.get_total(), obj.get_estado(),
-            obj.get_id_cliente(), obj.get_id_mesa(), obj.get_id()
+            obj.get_id_usuario(), obj.get_id_mesa(), obj.get_id()
         ))
         cls.fechar()
 

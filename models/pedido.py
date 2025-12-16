@@ -1,13 +1,13 @@
 from datetime import datetime
 
 class Pedido:
-    def __init__(self, id, dataHora, status, mesa, garcom):
-        self.set_id(id)
-        self.set_dataHora(dataHora)
-        self.set_status(status)
-        self.set_mesa(mesa)
-        self.set_garcom(garcom)
-        self.__itens = []
+    def __init__(self, id, data, total, estado, id_usuario, id_mesa):
+        self.__id = id
+        self.__data = data
+        self.__total = total
+        self.__estado = estado
+        self.__id_usuario = id_usuario
+        self.__id_mesa = id_mesa
 
     def get_id(self): return self.__id
     def get_dataHora(self): return self.__dataHora
