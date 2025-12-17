@@ -1,17 +1,30 @@
-from dao.dao import DAO
+from database import Database
 from models.prato import Prato
 
-class PratoDAO(DAO):
+class PratoDAO:
 
-    @classmethod
-    def inserir(cls, prato):
-        sql = "INSERT INTO prato (nome, categoria, preco) VALUES (?, ?, ?)"
-        cls.executar(sql, (prato.get_nome(), prato.get_categoria(), prato.get_preco()))
+    @staticmethod
+    def inserir(prato):
+        conn = Database.conectar()
+        cur = conn.cursor()
 
-    @classmethod
-    def listar(cls):
-        sql = "SELECT * FROM prato"
-        cur, conn = cls.executar(sql)
-        rows = cur.fetchall()
+        cur.execute("""
+            INSERT INTO prato (nome, categoria, preco)
+            VALUES (?, ?, ?)
+        """, (prato.get_nome(), prato.get_categoria(), prato.get_preco()))
+
+        conn.commit()
         conn.close()
-        return [Prato(*row) for row in rows]
+
+    @staticmethod
+    def listar():
+        conn = Database.conectar()
+        cur = conn.cursor()
+
+        cur.execute("SELECT id, nome, categoria, preco FROM prato")
+        rows = cur.fetchall()
+
+        pratos = [Prato(r[0], r[1], r[2], r[3]) for r in rows]
+
+        conn.close()
+        return pratos
