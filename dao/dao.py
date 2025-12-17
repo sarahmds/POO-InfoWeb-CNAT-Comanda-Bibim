@@ -1,7 +1,6 @@
 from database import Database
 
 class DAO:
-
     @classmethod
     def executar(cls, sql, params=()):
         conn = Database.conectar()

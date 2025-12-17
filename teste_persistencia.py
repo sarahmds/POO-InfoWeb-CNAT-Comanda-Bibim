@@ -6,11 +6,9 @@ print("=== TESTE DE PERSISTÊNCIA ===")
 
 Database.criar_tabelas()
 
-prato = Prato(0, "kimchi", "Coreano", 35.0)
+prato = Prato(None, "Kimchi", "Coreano", 35.0)
 PratoDAO.inserir(prato)
-print("Prato salvo no banco.")
 
-pratos = PratoDAO.listar()
-print("Pratos recuperados do banco:")
-for p in pratos:
+print("Pratos no banco:")
+for p in PratoDAO.listar():
     print(p)

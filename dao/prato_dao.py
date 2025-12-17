@@ -10,8 +10,7 @@ class PratoDAO(DAO):
 
     @classmethod
     def listar(cls):
-        sql = "SELECT * FROM prato"
-        cur, conn = cls.executar(sql)
-        rows = cur.fetchall()
+        cur, conn = cls.executar("SELECT * FROM prato")
+        pratos = [Prato(*row) for row in cur.fetchall()]
         conn.close()
-        return [Prato(*row) for row in rows]
+        return pratos
