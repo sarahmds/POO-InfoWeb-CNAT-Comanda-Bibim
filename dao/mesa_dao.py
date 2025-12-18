@@ -5,5 +5,5 @@ class MesaDAO(DAO):
 
     @classmethod
     def inserir(cls, mesa):
-        sql = "INSERT INTO mesa (numero, situacao) VALUES (?, ?)"
-        cls.executar(sql, (mesa.get_numero(), mesa.get_situacao()))
+        sql = "INSERT INTO mesa (numero, status) VALUES (?, ?)"
+        cls.executar(sql, (mesa.get_numero(), mesa.get_status()))

@@ -9,9 +9,9 @@ class PratoDAO:
         cur = conn.cursor()
 
         cur.execute("""
-            INSERT INTO prato (nome, preco)
+            INSERT INTO prato (nome, descricao, preco)
             VALUES (?, ?, ?)
-        """, (prato.get_nome(), prato.get_preco()))
+        """, (prato.get_nome(), prato.get_descricao(), prato.get_preco()))
 
         conn.commit()
         conn.close()
@@ -21,7 +21,7 @@ class PratoDAO:
         conn = Database.conectar()
         cur = conn.cursor()
 
-        cur.execute("SELECT id, nome, preco FROM prato")
+        cur.execute("SELECT id, nome, descricao, preco FROM prato")
         rows = cur.fetchall()
 
         pratos = [Prato(r[0], r[1], r[2], r[3]) for r in rows]

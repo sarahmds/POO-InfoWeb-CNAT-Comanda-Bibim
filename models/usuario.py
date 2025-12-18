@@ -1,4 +1,4 @@
-class Usuario:
+class garcom:
     def __init__(self, id, nome, email, senha, perfil):
         self.__id = id
         self.__nome = nome

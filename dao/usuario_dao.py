@@ -1,14 +1,14 @@
 from dao.dao import DAO
-from models.usuario import Usuario
+from models.garcom import garcom
 
-class UsuarioDAO(DAO):
+class garcomDAO(DAO):
 
     @classmethod
-    def inserir(cls, usuario):
-        sql = "INSERT INTO usuario (nome, email, senha, perfil) VALUES (?, ?, ?, ?)"
+    def inserir(cls, garcom):
+        sql = "INSERT INTO garcom (nome, email, senha, perfil) VALUES (?, ?, ?, ?)"
         cls.executar(sql, (
-            usuario.get_nome(),
-            usuario.get_email(),
-            usuario.get_senha(),
-            usuario.get_perfil()
+            garcom.get_nome(),
+            garcom.get_email(),
+            garcom.get_senha(),
+            garcom.get_perfil()
         ))
