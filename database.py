@@ -15,7 +15,7 @@ class Database:
         cur = conn.cursor()
 
         cur.execute("""
-        CREATE TABLE IF NOT EXISTS garcom (
+        CREATE TABLE IF NOT EXISTS usuario (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT NOT NULL,
             email TEXT UNIQUE NOT NULL,
@@ -47,9 +47,9 @@ class Database:
             data TEXT NOT NULL,
             total REAL NOT NULL,
             estado TEXT NOT NULL,
-            id_garcom INTEGER,
+            id_usuario INTEGER,
             id_mesa INTEGER,
-            FOREIGN KEY (id_garcom) REFERENCES garcom(id),
+            FOREIGN KEY (id_usuario) REFERENCES usuario(id),
             FOREIGN KEY (id_mesa) REFERENCES mesa(id)
         )
         """)
