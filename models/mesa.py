@@ -1,5 +1,6 @@
+# models/mesa.py
 class Mesa:
-    def __init__(self, numero: int, status, id: int = None):
+    def __init__(self, numero: int, status: str = "LIVRE", id: int = None):
         self.__id = id
         self.__numero = numero
         self.__status = status
@@ -13,14 +14,11 @@ class Mesa:
     def get_status(self):
         return self.__status
 
-    def set_numero(self, numero):
-        self.__numero = numero
-
-    def set_status(self, status):
-        self.__status = status
-
     def ocupar(self):
         self.__status = "OCUPADA"
 
     def liberar(self):
         self.__status = "LIVRE"
+
+    def __str__(self):
+        return f"Mesa {self.__numero} - {self.__status}"

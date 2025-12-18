@@ -1,9 +1,11 @@
 from database import Database
 from models.prato import Prato
 from dao.prato_dao import PratoDAO
+from models.mesa import Mesa
+from dao.mesa_dao import MesaDAO
 
 
-print("=== TESTE DE PERSISTÊNCIA ===")
+print("=== TESTE DE prato ===")
 
 Database.criar_tabelas()
 
@@ -16,3 +18,20 @@ PratoDAO.inserir(prato)
 print("Pratos no banco:")
 for p in PratoDAO.listar():
     print(p)
+
+
+
+print("=== TESTE DE MESA ===")
+
+Database.criar_tabelas()
+
+mesa1 = Mesa(1)  
+MesaDAO.inserir(mesa1)
+
+mesa2 = Mesa(2, "OCUPADA")
+MesaDAO.inserir(mesa2)
+
+print("Mesas no banco:")
+for m in MesaDAO.listar():
+    print(m)
+
