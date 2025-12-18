@@ -1,13 +1,35 @@
 class ItemPedido:
-    def __init__(self, id, id_pedido, id_prato, quantidade, subtotal):
+    def __init__(self, prato, quantidade: int, pedido, id: int = None):
         self.__id = id
-        self.__id_pedido = id_pedido
-        self.__id_prato = id_prato
+        self.__prato = prato     
         self.__quantidade = quantidade
-        self.__subtotal = subtotal
+        self.__pedido = pedido    
 
-    def get_id(self): return self.__id
-    def get_id_pedido(self): return self.__id_pedido
-    def get_id_prato(self): return self.__id_prato
-    def get_quantidade(self): return self.__quantidade
-    def get_subtotal(self): return self.__subtotal
+    def get_id(self):
+        return self.__id
+
+    def get_prato(self):
+        return self.__prato
+
+    def get_quantidade(self):
+        return self.__quantidade
+
+    def get_pedido(self):
+        return self.__pedido
+
+    # ===== SETTERS =====
+    def set_prato(self, prato):
+        self.__prato = prato
+
+    def set_quantidade(self, quantidade):
+        self.__quantidade = quantidade
+
+    def set_pedido(self, pedido):
+        self.__pedido = pedido
+
+    # ===== MÉTODO DO DIAGRAMA =====
+    def subtotal(self) -> float:
+        """
+        Assume que o objeto Prato possui o método get_preco()
+        """
+        return self.__quantidade * self.__prato.get_preco()

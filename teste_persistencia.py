@@ -8,6 +8,8 @@ Database.criar_tabelas()
 
 prato = Prato(None, "Kimchi", "conserva coreana tradicional de vegetais fermentados", 35.0)
 PratoDAO.inserir(prato)
+prato = Prato(None, "Tteokbokki", "Bolinhos de arroz cilíndricos e macios cozidos em um molho espesso, picante e levemente adocicado de gochujang.", 35.0)
+PratoDAO.inserir(prato)
 
 print("Pratos no banco:")
 for p in PratoDAO.listar():

@@ -1,7 +1,7 @@
 import sqlite3
 
 class Database:
-    NOME_BD = "restaurante.db"
+    NOME_BD = "comanda.db"
 
     @classmethod
     def conectar(cls):
@@ -44,15 +44,16 @@ class Database:
         cur.execute("""
         CREATE TABLE IF NOT EXISTS pedido (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            data TEXT NOT NULL,
+            data_hora TEXT NOT NULL,
+            status TEXT NOT NULL,
             total REAL NOT NULL,
-            estado TEXT NOT NULL,
-            id_usuario INTEGER,
-            id_mesa INTEGER,
-            FOREIGN KEY (id_usuario) REFERENCES usuario(id),
+            id_garcom INTEGER NOT NULL,
+            id_mesa INTEGER NOT NULL,
+            FOREIGN KEY (id_garcom) REFERENCES usuario(id),
             FOREIGN KEY (id_mesa) REFERENCES mesa(id)
         )
         """)
+
 
         cur.execute("""
         CREATE TABLE IF NOT EXISTS item_pedido (

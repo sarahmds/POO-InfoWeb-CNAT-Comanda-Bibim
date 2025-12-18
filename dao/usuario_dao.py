@@ -1,11 +1,17 @@
 from dao.dao import DAO
-from models.usuario import usuario
+from models.usuario import Usuario
 
-class usuarioDAO(DAO):
+
+class UsuarioDAO(DAO):
 
     @classmethod
-    def inserir(cls, usuario):
-        sql = "INSERT INTO usuario (nome, email, senha, perfil) VALUES (?, ?, ?, ?)"
+    def inserir(cls, usuario: Usuario):
+        usuario.validarDados()
+
+        sql = """
+        INSERT INTO usuario (nome, email, senha, perfil)
+        VALUES (?, ?, ?, ?)
+        """
         cls.executar(sql, (
             usuario.get_nome(),
             usuario.get_email(),
