@@ -1,6 +1,5 @@
-from dao.dao import DAO
+from .dao import DAO
 from models.prato import Prato
-
 
 class PratoDAO(DAO):
 
