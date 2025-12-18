@@ -1,12 +1,11 @@
 class Usuario:
-    def __init__(self, nome: str, email: str, senha: str, perfil, id: int = None):
+    def __init__(self, nome: str, email: str, senha: str, perfil: str, id: int = None):
         self.__id = id
         self.__nome = nome
         self.__email = email
         self.__senha = senha
         self.__perfil = perfil
 
-    # GETTERS
     def get_id(self):
         return self.__id
 
@@ -38,6 +37,8 @@ class Usuario:
     def validarDados(self):
         if not self.__nome or not self.__email or not self.__senha:
             raise ValueError("Nome, email e senha são obrigatórios")
-
         if "@" not in self.__email:
             raise ValueError("Email inválido")
+
+    def __str__(self):
+        return f"{self.__id} - {self.__nome} ({self.__email}) - Perfil: {self.__perfil}"
