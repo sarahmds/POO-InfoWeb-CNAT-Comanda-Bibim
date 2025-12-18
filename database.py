@@ -36,7 +36,6 @@ class Database:
         CREATE TABLE IF NOT EXISTS prato (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT NOT NULL,
-            categoria TEXT NOT NULL,
             preco REAL NOT NULL
         )
         """)
