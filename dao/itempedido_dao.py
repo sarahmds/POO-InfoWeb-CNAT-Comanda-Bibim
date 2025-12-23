@@ -7,7 +7,7 @@ class ItemPedidoDAO(DAO):
     @classmethod
     def inserir(cls, item: ItemPedido):
         sql = """
-        INSERT INTO item_pedido (pedido, prato, quantidade, subtotal)
+        INSERT INTO item_pedido (id_pedido, id_prato, quantidade, subtotal)
         VALUES (?, ?, ?, ?)
         """
         cls.executar(sql, (

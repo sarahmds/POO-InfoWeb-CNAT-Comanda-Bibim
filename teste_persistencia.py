@@ -31,10 +31,10 @@ print("=== TESTE DE MESA ===")
 
 Database.criar_tabelas()
 
-mesa1 = Mesa(1)  
+mesa1 = Mesa(1, "OCUPADA")  
 MesaDAO.inserir(mesa1)
 
-mesa2 = Mesa(2, "OCUPADA")
+mesa2 = Mesa(2)
 MesaDAO.inserir(mesa2)
 
 print("Mesas no banco:")
