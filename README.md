@@ -16,5 +16,5 @@ Este projeto tem como objetivo ser um site de controle de pedidos do restaurante
 
 ## Artefatos do Projeto
 * [Documento de Visão](docs/Documento-de-visao.md)
-* [Diagrama de Casos de Uso](docs/Diagrama-de-Casos-de-Uso)
-* [Diagrama de Classes do Modelo e da Persistência](docs/Diagrama-de-Classes-do-Modelo-e-da-Persistência)
+* [Diagrama de Casos de Uso](docs/Diagrama-de-Casos-de-Uso/casos-de-uso.png)
+* [Diagrama de Classes do Modelo e da Persistência](docs/Diagrama-de-Classes-do-Modelo-e-da-Persistência/Diagrama-de-Classes.png)
