@@ -1,4 +1,3 @@
-# dao/item_pedido_dao.py
 from .dao import DAO
 from models.item_pedido import ItemPedido
 
@@ -20,5 +19,22 @@ class ItemPedidoDAO(DAO):
     @classmethod
     def listar(cls):
         sql = "SELECT id, id_pedido, id_prato, quantidade, subtotal FROM item_pedido"
-        rows = cls.consultar(sql)
-        return rows
+        return cls.consultar(sql)
+
+    @classmethod
+    def atualizar(cls, item: ItemPedido):
+        sql = """
+        UPDATE item_pedido
+        SET quantidade = ?, subtotal = ?
+        WHERE id = ?
+        """
+        cls.executar(sql, (
+            item.get_quantidade(),
+            item.subtotal(),
+            item.get_id()
+        ))
+
+    @classmethod
+    def excluir(cls, id):
+        sql = "DELETE FROM item_pedido WHERE id = ?"
+        cls.executar(sql, (id,))

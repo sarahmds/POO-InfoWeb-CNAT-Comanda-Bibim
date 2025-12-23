@@ -1,4 +1,3 @@
-# dao/pedido_dao.py
 from .dao import DAO
 from models.pedido import Pedido
 from datetime import datetime
@@ -25,12 +24,29 @@ class PedidoDAO(DAO):
         rows = cls.consultar(sql)
         pedidos = []
         for r in rows:
-            pedido = Pedido(
+            pedidos.append(Pedido(
                 mesa=r[4],
                 garcom=r[3],
                 status=r[2],
                 dataHora=datetime.strptime(r[1], "%Y-%m-%d %H:%M:%S"),
                 id=r[0]
-            )
-            pedidos.append(pedido)
+            ))
         return pedidos
+
+    @classmethod
+    def atualizar(cls, pedido: Pedido):
+        sql = """
+        UPDATE pedido
+        SET status = ?, total = ?
+        WHERE id = ?
+        """
+        cls.executar(sql, (
+            pedido.get_status(),
+            pedido.calcularTotal(),
+            pedido.get_id()
+        ))
+
+    @classmethod
+    def excluir(cls, id):
+        sql = "DELETE FROM pedido WHERE id = ?"
+        cls.executar(sql, (id,))
