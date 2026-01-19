@@ -33,7 +33,7 @@ class PedidoUI:
             View.pedido_criar(mesa.get_id(), st.session_state["usuario_id"])
             st.success("Pedido criado")
             time.sleep(1)
-            st.experimental_rerun()
+            st.rerun()
 
     # ===== Adicionar Item =====
     def adicionar_item():
@@ -62,7 +62,7 @@ class PedidoUI:
             View.item_pedido_inserir(pedido, prato, qtd)
             st.success("Item adicionado")
             time.sleep(1)
-            st.experimental_rerun()
+            st.rerun()
 
         if st.button("Enviar para Cozinha", key="btn_enviar_cozinha"):
             View.pedido_atualizar_status(pedido, "ENVIADO")
@@ -102,7 +102,7 @@ class PedidoUI:
             View.item_pedido_excluir(id_item)
             st.success("Item removido")
             time.sleep(1)
-            st.experimental_rerun()
+            st.rerun()
 
     # ===== Listar Pedidos =====
     def listar_pedidos():
