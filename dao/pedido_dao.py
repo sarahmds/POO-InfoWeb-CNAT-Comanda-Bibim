@@ -1,52 +1,79 @@
-from .dao import DAO
+from database import Database
 from models.pedido import Pedido
-from datetime import datetime
 
-class PedidoDAO(DAO):
-
-    @classmethod
-    def inserir(cls, pedido: Pedido):
-        sql = """
-        INSERT INTO pedido (data_hora, status, id_garcom, id_mesa, total)
-        VALUES (?, ?, ?, ?, ?)
-        """
-        cls.executar(sql, (
-            pedido.get_dataHora().strftime("%Y-%m-%d %H:%M:%S"),
-            pedido.get_status(),
-            pedido.get_garcom(),
-            pedido.get_mesa(),
-            pedido.calcularTotal()
-        ))
+class PedidoDAO:
 
     @classmethod
     def listar(cls):
-        sql = "SELECT id, data_hora, status, id_garcom, id_mesa, total FROM pedido"
-        rows = cls.consultar(sql)
+        """Lista todos os pedidos"""
+        conn = Database.conectar()
+        cur = conn.cursor()
+        cur.execute("SELECT id, mesa, garcom, status, dataHora, dia_id FROM pedido ORDER BY id DESC")
+        rows = cur.fetchall()
+        conn.close()
+
         pedidos = []
         for r in rows:
             pedidos.append(Pedido(
-                mesa=r[4],
-                garcom=r[3],
-                status=r[2],
-                dataHora=datetime.strptime(r[1], "%Y-%m-%d %H:%M:%S"),
-                id=r[0]
+                id=r[0],
+                mesa=r[1],
+                garcom=r[2],
+                status=r[3],
+                dataHora=r[4],
+                dia_id=r[5]
             ))
         return pedidos
 
     @classmethod
-    def atualizar(cls, pedido: Pedido):
-        sql = """
-        UPDATE pedido
-        SET status = ?, total = ?
-        WHERE id = ?
-        """
-        cls.executar(sql, (
-            pedido.get_status(),
-            pedido.calcularTotal(),
-            pedido.get_id()
-        ))
+    def listar_por_dia(cls, id_dia):
+        """Lista todos os pedidos de um dia específico"""
+        conn = Database.conectar()
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT id, mesa, garcom, status, dataHora, dia_id FROM pedido WHERE dia_id = ? ORDER BY id DESC",
+            (id_dia,)
+        )
+        rows = cur.fetchall()
+        conn.close()
+
+        pedidos = []
+        for r in rows:
+            pedidos.append(Pedido(
+                id=r[0],
+                mesa=r[1],
+                garcom=r[2],
+                status=r[3],
+                dataHora=r[4],
+                dia_id=r[5]
+            ))
+        return pedidos
 
     @classmethod
-    def excluir(cls, id):
-        sql = "DELETE FROM pedido WHERE id = ?"
-        cls.executar(sql, (id,))
+    def inserir(cls, pedido):
+        conn = Database.conectar()
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO pedido (mesa, garcom, status, dataHora, dia_id) VALUES (?, ?, ?, ?, ?)",
+            (pedido.get_mesa(), pedido.get_garcom(), pedido.get_status(), pedido.get_dataHora(), getattr(pedido, "dia_id", None))
+        )
+        conn.commit()
+        conn.close()
+
+    @classmethod
+    def atualizar(cls, pedido):
+        conn = Database.conectar()
+        cur = conn.cursor()
+        cur.execute(
+            "UPDATE pedido SET mesa=?, garcom=?, status=?, dataHora=?, dia_id=? WHERE id=?",
+            (pedido.get_mesa(), pedido.get_garcom(), pedido.get_status(), pedido.get_dataHora(), getattr(pedido, "dia_id", None), pedido.get_id())
+        )
+        conn.commit()
+        conn.close()
+
+    @classmethod
+    def excluir(cls, id_pedido):
+        conn = Database.conectar()
+        cur = conn.cursor()
+        cur.execute("DELETE FROM pedido WHERE id=?", (id_pedido,))
+        conn.commit()
+        conn.close()

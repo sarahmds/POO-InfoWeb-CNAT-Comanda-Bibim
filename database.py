@@ -14,6 +14,7 @@ class Database:
         conn = cls.conectar()
         cur = conn.cursor()
 
+        # ===== USUARIO =====
         cur.execute("""
         CREATE TABLE IF NOT EXISTS usuario (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -24,6 +25,7 @@ class Database:
         )
         """)
 
+        # ===== MESA =====
         cur.execute("""
         CREATE TABLE IF NOT EXISTS mesa (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -32,6 +34,7 @@ class Database:
         )
         """)
 
+        # ===== PRATO =====
         cur.execute("""
         CREATE TABLE IF NOT EXISTS prato (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -41,20 +44,31 @@ class Database:
         )
         """)
 
+        # ===== DIA =====
         cur.execute("""
-        CREATE TABLE IF NOT EXISTS pedido (
+        CREATE TABLE IF NOT EXISTS dia (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            data_hora TEXT NOT NULL,
-            status TEXT NOT NULL,
-            total REAL NOT NULL,
-            id_garcom INTEGER NOT NULL,
-            id_mesa INTEGER NOT NULL,
-            FOREIGN KEY (id_garcom) REFERENCES usuario(id),
-            FOREIGN KEY (id_mesa) REFERENCES mesa(id)
+            data TEXT NOT NULL,
+            aberto INTEGER NOT NULL
         )
         """)
 
+        # ===== PEDIDO =====
+        cur.execute("""
+        CREATE TABLE IF NOT EXISTS pedido (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            mesa INTEGER NOT NULL,
+            garcom INTEGER NOT NULL,
+            status TEXT NOT NULL,
+            dataHora TEXT NOT NULL,
+            dia_id INTEGER,
+            FOREIGN KEY (mesa) REFERENCES mesa(id),
+            FOREIGN KEY (garcom) REFERENCES usuario(id),
+            FOREIGN KEY (dia_id) REFERENCES dia(id)
+        )
+        """)
 
+        # ===== ITEM PEDIDO =====
         cur.execute("""
         CREATE TABLE IF NOT EXISTS item_pedido (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
