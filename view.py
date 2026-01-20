@@ -165,6 +165,10 @@ class View:
     def pedidos_do_dia_id(id_dia):
         return PedidoDAO.listar_por_dia(id_dia)
 
+    @staticmethod
+    def pedido_excluir(id_pedido):
+        PedidoDAO.excluir(id_pedido)
+
     # ===== ITEM PEDIDO =====
     @staticmethod
     def item_pedido_inserir(pedido, prato, quantidade):

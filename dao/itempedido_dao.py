@@ -67,3 +67,26 @@ class ItemPedidoDAO:
         cur.execute("DELETE FROM item_pedido WHERE id = ?", (id_item,))
         conn.commit()
         conn.close()
+
+    @classmethod
+    def atualizar(cls, item):
+        conn = Database.conectar()
+        cur = conn.cursor()
+
+        subtotal = item.get_quantidade() * item.get_prato().get_preco()
+
+        cur.execute(
+            """
+            UPDATE item_pedido
+            SET quantidade = ?, subtotal = ?
+            WHERE id = ?
+            """,
+            (
+                item.get_quantidade(),
+                subtotal,
+                item.get_id()
+            )
+        )
+
+        conn.commit()
+        conn.close()

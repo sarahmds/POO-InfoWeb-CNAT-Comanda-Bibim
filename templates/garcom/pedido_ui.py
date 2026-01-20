@@ -107,7 +107,7 @@ class PedidoUI:
         item = st.selectbox(
             "Item",
             itens,
-            format_func=lambda i: f"{i.get_prato().get_nome()} (Qtd: {i.get_quantidade()})",
+            format_func=lambda i: f"{i.get_prato().get_nome()} ( {i.get_quantidade()})",
             key="item_unitario_remover"
         )
 
