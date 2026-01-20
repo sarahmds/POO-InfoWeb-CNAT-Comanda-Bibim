@@ -1,5 +1,4 @@
 import streamlit as st
-import time
 from view import View
 
 class CozinhaUI:
@@ -7,66 +6,51 @@ class CozinhaUI:
     @staticmethod
     def main():
         st.header("Pedidos na Cozinha")
-        pedidos = View.pedido_listar()
 
-        # Filtra apenas pedidos enviados ou em preparo
-        pedidos_cozinha = [
-            p for p in pedidos if p.get_status() in ["ENVIADO", "EM PREPARO"]
-        ]
+        pedidos = View.pedido_listar()
+        pedidos_cozinha = [p for p in pedidos if p.get_status() in ["ENVIADO", "EM PREPARO", "PRONTO"]]
 
         if not pedidos_cozinha:
             st.write("Nenhum pedido na cozinha")
             return
 
-        st.write("### Itens dos Pedidos")
-
-        pedidos_prontos = True  # Flag para verificar se todos os pedidos já estão prontos
-
         for p in pedidos_cozinha:
-            st.subheader(f"Mesa {p.get_mesa()} - Status: {p.get_status()}")
+            st.subheader(f"Mesa {p.get_mesa()} - Pedido {p.get_id()} - Status: {p.get_status()}")
+
             itens = View.item_pedido_listar(p.get_id())
+            if not itens:
+                st.write("Pedido sem itens.")
+                continue
 
-            # Agrupa pratos por nome somando as quantidades
-            pratos_agrupados = {}
+            # Controle de preparo por unidade
+            todas_unidades_prontas = True
+
             for i in itens:
-                nome = i.get_prato().get_nome()
-                if nome in pratos_agrupados:
-                    pratos_agrupados[nome] += i.get_quantidade()
+                st.markdown(f"**{i.get_prato().get_nome()}**")
+
+                for u in range(i.get_quantidade()):
+                    key = f"pedido_{p.get_id()}_item_{i.get_id()}_u_{u}"
+
+                    if key not in st.session_state:
+                        st.session_state[key] = False
+
+                    pronto = st.checkbox(f"Unidade {u + 1}", key=key)
+                    if not pronto:
+                        todas_unidades_prontas = False
+
+            # Botão para marcar pedido como PRONTO
+            if p.get_status() in ["ENVIADO", "EM PREPARO"]:
+                if todas_unidades_prontas:
+                    if st.button(f"Marcar Pedido {p.get_id()} como PRONTO", key=f"pronto_{p.get_id()}"):
+                        View.pedido_atualizar_status(p.get_id(), "PRONTO")
+                        st.success("Pedido marcado como PRONTO")
+                        st.rerun()
                 else:
-                    pratos_agrupados[nome] = i.get_quantidade()
+                    st.warning("Ainda há unidades não preparadas.")
 
-            todos_prontos = True  # Flag para este pedido
-            for prato, qtd_total in pratos_agrupados.items():
-                st.write(f"**{prato}** - Quantidade: {qtd_total}")
-                for unidade in range(qtd_total):
-                    key_checkbox = f"{p.get_id()}_{prato}_{unidade}"
-                    if key_checkbox not in st.session_state:
-                        st.session_state[key_checkbox] = False
-
-                    checked = st.checkbox(f"Unidade {unidade+1}", key=key_checkbox)
-                    if not checked:
-                        todos_prontos = False  # ainda há unidades não prontas
-
-            # Atualiza status do pedido automaticamente
-            if todos_prontos and p.get_status() != "PRONTO":
-                # Contagem regressiva para simular "preparando"
-                for i in range(3, 0, -1):
-                    st.write(f"Atualizando status de Pedido {p.get_id()} para PRONTO em {i}...")
-                    time.sleep(1)
-                    st.experimental_rerun()
-                View.pedido_atualizar_status(p.get_id(), "PRONTO")
-                st.success(f"Pedido {p.get_id()} agora está PRONTO")
-
-            if not todos_prontos:
-                pedidos_prontos = False
-
-        # Botão para enviar pedido como CONCLUÍDO
-        if st.button("Enviar Pedido(s) para CONCLUÍDO"):
-            if pedidos_prontos:
-                for p in pedidos_cozinha:
-                    if p.get_status() == "PRONTO":
-                        View.pedido_atualizar_status(p.get_id(), "CONCLUÍDO")
-                st.success("Todos os pedidos foram enviados como CONCLUÍDOS")
-                st.rerun()
-            else:
-                st.warning("Ainda há pratos a serem preparados! Não é possível concluir o pedido.")
+            # Botão para enviar pedido preparado
+            if p.get_status() == "PRONTO":
+                if st.button(f"Enviar Pedido {p.get_id()} Preparado", key=f"enviar_{p.get_id()}"):
+                    View.pedido_atualizar_status(p.get_id(), "CONCLUÍDO")
+                    st.success("Pedido enviado como CONCLUÍDO")
+                    st.rerun()

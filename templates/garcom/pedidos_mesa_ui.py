@@ -8,16 +8,20 @@ class PedidosMesaUI:
         st.header("Pedidos por Mesa")
 
         mesas = View.mesa_listar()
-        if len(mesas) == 0:
+        if not mesas:
             st.write("Nenhuma mesa cadastrada")
             return
 
-        mesa = st.selectbox("Mesa", mesas)
-        pedidos = View.pedido_listar()
+        mesa = st.selectbox(
+            "Mesa",
+            mesas,
+            format_func=lambda m: f"Mesa {m.get_id()}"
+        )
 
+        pedidos = View.pedido_listar()
         pedidos_mesa = [p for p in pedidos if p.get_mesa() == mesa.get_id()]
 
-        if len(pedidos_mesa) == 0:
+        if not pedidos_mesa:
             st.write("Nenhum pedido para esta mesa")
             return
 
