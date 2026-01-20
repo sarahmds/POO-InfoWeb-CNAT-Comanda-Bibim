@@ -49,13 +49,13 @@ class IndexUI:
             "Menu",
             [
                 "Consultar Mesas",
-                "Criar Pedido",
+                "Gerenciar pedidos",
                 "Pedidos por Mesa",
                 "Pesquisa"
             ]
         )
         if op == "Consultar Mesas": MesaUI.main()
-        if op == "Criar Pedido": PedidoUI.main()
+        if op == "Gerenciar pedidos": PedidoUI.main()
         if op == "Pedidos por Mesa": PedidosMesaUI.main()
         if op == "Pesquisa": PesquisaUI.main()
 

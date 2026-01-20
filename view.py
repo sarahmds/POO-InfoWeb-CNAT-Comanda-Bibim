@@ -82,21 +82,37 @@ class View:
 
     @staticmethod
     def mesa_liberar(id_mesa):
-        for m in MesaDAO.listar():
-            if m.get_id() == id_mesa:
-                m.liberar()
-                MesaDAO.atualizar(m)
+        # Busca a mesa
+        mesa = next((m for m in MesaDAO.listar() if m.get_id() == id_mesa), None)
+        if not mesa:
+            return False  # Não liberou
+
+        # Verifica se há pedidos vinculados à mesa
+        pedidos = [p for p in PedidoDAO.listar() if p.get_mesa() == id_mesa]
+
+        # Se houver pedidos e algum não estiver "PAGO", mostra aviso e não libera
+        if pedidos and any(p.get_status() != "PAGO" for p in pedidos):
+            import streamlit as st
+            st.warning("Não é possível liberar a mesa enquanto houver pedidos não pagos.")
+            return False  # Não liberou
+
+        # Se não houver pedidos ou todos estiverem pagos, libera a mesa
+        mesa.liberar()
+        MesaDAO.atualizar(mesa)
+        return True  # Liberou com sucesso
 
     @staticmethod
     def mesa_excluir(id_mesa):
+        # Verifica se há pedidos vinculados à mesa
+        pedidos = [p for p in PedidoDAO.listar() if p.get_mesa() == id_mesa]
+        if pedidos:
+            import streamlit as st
+            st.warning("Não é possível excluir a mesa enquanto houver pedidos vinculados.")
+            return False
+        # Se não houver pedidos, exclui a mesa
         MesaDAO.excluir(id_mesa)
+        return True
 
-    @staticmethod
-    def pedido_por_mesa(id_mesa):
-        for p in PedidoDAO.listar():
-            if p.get_mesa() == id_mesa and p.get_status() in ["ABERTO", "EM ANDAMENTO"]:
-                return p
-        return None
 
     # ===== PRATO =====
     @staticmethod
@@ -140,7 +156,6 @@ class View:
 
     @staticmethod
     def pedidos_do_dia():
-        # Retorna apenas pedidos do dia aberto
         dia_atual = DiaDAO.dia_aberto()
         if not dia_atual:
             return []
@@ -162,6 +177,10 @@ class View:
     @staticmethod
     def item_pedido_excluir(id_item):
         ItemPedidoDAO.excluir(id_item)
+
+    @staticmethod
+    def item_pedido_atualizar(item):
+        ItemPedidoDAO.atualizar(item)
 
     # ===== DIA =====
     @staticmethod
@@ -192,3 +211,10 @@ class View:
     @staticmethod
     def listar_dias():
         return DiaDAO.listar()
+    # ===== PEDIDO POR MESA =====
+    @staticmethod
+    def pedido_por_mesa(id_mesa):
+        for p in PedidoDAO.listar():
+            if p.get_mesa() == id_mesa and p.get_status() in ["ABERTO", "EM ANDAMENTO"]:
+                return p
+        return None

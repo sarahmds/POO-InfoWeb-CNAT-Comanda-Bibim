@@ -38,7 +38,6 @@ class MesaUI:
 
         if st.button("Inserir Mesas"):
             for _ in range(quantidade):
-                # Passando None ou qualquer valor pois ID é auto increment do DB
                 View.mesa_inserir("Mesa")  # O parâmetro não será usado
             st.success(f"{quantidade} mesa(s) adicionada(s) com sucesso")
             time.sleep(1)
@@ -49,21 +48,29 @@ class MesaUI:
         mesas = View.mesa_listar()
         if len(mesas) == 0:
             st.write("Nenhuma mesa cadastrada")
+            return
+
+        # Mostrar apenas ID no selectbox
+        m = st.selectbox(
+            "Mesa (ID)",
+            mesas,
+            format_func=lambda x: f"ID {x.get_id()} - {x.get_status()}"
+        )
+
+        if m.get_status() == "LIVRE":
+            if st.button("Ocupar"):
+                View.mesa_ocupar(m.get_id())
+                st.success(f"Mesa ID {m.get_id()} ocupada")
+                time.sleep(1)
+                st.rerun()
         else:
-            # Mostrar apenas ID no selectbox
-            m = st.selectbox("Mesa (ID)", mesas, format_func=lambda x: f"ID {x.get_id()} - {x.get_status()}")
-            if m.get_status() == "LIVRE":
-                if st.button("Ocupar"):
-                    View.mesa_ocupar(m.get_id())
-                    st.success(f"Mesa ID {m.get_id()} ocupada")
-                    time.sleep(1)
-                    st.rerun()
-            else:
-                if st.button("Liberar"):
-                    View.mesa_liberar(m.get_id())
+            if st.button("Liberar"):
+                liberou = View.mesa_liberar(m.get_id())  # Agora retorna True/False
+                if liberou:
                     st.success(f"Mesa ID {m.get_id()} liberada")
-                    time.sleep(1)
-                    st.rerun()
+                # Se não liberou, a função já mostra o aviso dentro do View
+                time.sleep(1)
+                st.rerun()
 
     # ===== EXCLUIR =====
     def excluir():
@@ -72,10 +79,16 @@ class MesaUI:
             st.write("Nenhuma mesa cadastrada")
             return
 
-        m = st.selectbox("Mesa para excluir (ID)", mesas, format_func=lambda x: f"ID {x.get_id()} - {x.get_status()}", key="mesa_excluir")
-
+        m = st.selectbox(
+            "Mesa para excluir (ID)",
+            mesas,
+            format_func=lambda x: f"ID {x.get_id()} - {x.get_status()}",
+            key="mesa_excluir"
+        )
+        
         if st.button("Excluir Mesa"):
-            View.mesa_excluir(m.get_id())
-            st.success(f"Mesa ID {m.get_id()} excluída com sucesso")
+            excluiu = View.mesa_excluir(m.get_id())
+            if excluiu:
+                st.success(f"Mesa ID {m.get_id()} excluída com sucesso")
             time.sleep(1)
             st.rerun()

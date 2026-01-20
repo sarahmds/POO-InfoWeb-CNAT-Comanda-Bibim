@@ -27,7 +27,7 @@ Implementação de um sistema web para gerenciamento de mesas, pedidos e cardáp
 | Nome | Descrição | Responsabilidade |
 | :--: | :-------: | :--------------: |
 | **Gerente** | administrador geral do sistema | cadastrar usuários, gerenciar cardápio, gerenciar mesas e visualizar relatórios |
-| **Garçom** | funcionário responsável pelo atendimento | gerenciar ocupação das mesas, criar pedidos e enviá-los à cozinha |
+| **Garçom** | funcionário responsável pelo atendimento | gerenciar ocupação das mesas, Gerenciar pedidoss e enviá-los à cozinha |
 | **Chef** | responsável pelo preparo dos pratos | visualizar pedidos enviados, atualizar status e finalizar preparo |
 
 
@@ -53,7 +53,7 @@ O banco de dados SQLite armazenará informações de mesas, usuários, pratos, p
 - Login
 - Consultar mesas  
 - Ocupar e liberar mesas
-- Criar pedido
+- Gerenciar pedidos
 - Adicionar itens ao pedido
 - Enviar pedido para cozinha
 - Listar pedidos por mesa
@@ -88,7 +88,7 @@ O banco de dados SQLite armazenará informações de mesas, usuários, pratos, p
 | RF05  | Gerenciar cardápio| Criar, editar, listar e excluir pratos| alta|
 | RF06  | Consultar mesas| Visualizar lista e status das mesas| alta|
 | RF07  | Ocupar e liberar mesas| Alterar status da mesa (livre/ocupada)| alta|
-| RF08  | Criar pedido| Registrar pedido vinculado à mesa| alta|
+| RF08  | Gerenciar pedidos| Registrar pedido vinculado à mesa| alta|
 | RF09  | Adicionar itens ao pedido| Inserir pratos em pedido existente| alta|
 | RF10  | Enviar pedido para cozinha| Alterar status do pedido para “enviado”| alta|
 | RF11  | Listar pedidos na cozinha | Exibir pedidos pendentes para preparo| alta|
