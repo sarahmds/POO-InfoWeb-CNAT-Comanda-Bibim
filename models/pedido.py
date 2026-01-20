@@ -3,14 +3,13 @@ from datetime import datetime
 class Pedido:
     def __init__(self, id=None, mesa=None, garcom=None, status="ABERTO", dataHora=None, total=0.0, dia_id=None):
         self.id = id
-        self.mesa = mesa            # id da mesa
-        self.garcom = garcom        # id do garçom
+        self.mesa = mesa 
+        self.garcom = garcom
         self.status = status
         self.dataHora = dataHora if dataHora else datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.total = total
-        self.dia_id = dia_id        # id do dia em que o pedido foi feito
+        self.dia_id = dia_id
 
-    # ===== GETTERS =====
     def get_id(self):
         return self.id
 
@@ -32,7 +31,6 @@ class Pedido:
     def get_dia_id(self):
         return self.dia_id
 
-    # ===== SETTERS / ATUALIZAÇÕES =====
     def atualizarStatus(self, status):
         self.status = status
 
@@ -42,7 +40,6 @@ class Pedido:
     def atualizarDia(self, dia_id):
         self.dia_id = dia_id
 
-    # ===== CÁLCULO DE TOTAL (somando itens) =====
     def calcularTotal(self, itens=[]):
         """
         Calcula o total do pedido com base nos itens.
@@ -56,6 +53,5 @@ class Pedido:
         self.total = total
         return total
 
-    # ===== REPRESENTAÇÃO LEGÍVEL =====
     def __str__(self):
         return f"Pedido {self.id} - Mesa: {self.mesa}, Garçom: {self.garcom}, Status: {self.status}, Total: R$ {self.total:.2f}, Dia ID: {self.dia_id}"

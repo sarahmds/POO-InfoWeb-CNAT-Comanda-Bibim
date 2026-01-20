@@ -5,57 +5,49 @@ from view import View
 class RelatorioDiaUI:
 
     def main():
-        st.header("Relatório de Todos os Dias")
+        st.header("Relatório do Dia")
 
-        # Obter todos os dias registrados
         dias = View.listar_dias()
         if not dias:
-            st.write("Nenhum dia registrado ainda.")
+            st.write("Nenhum dia registrado.")
             return
 
         for dia in dias:
             st.subheader(f"Dia: {dia.get_data()}")
-            st.write(f"Aberto: {'Sim' if dia.get_aberto() else 'Não'}")
 
-            # Pedidos do dia
             pedidos = View.pedidos_do_dia_id(dia.get_id())
             if not pedidos:
-                st.write("Nenhum pedido registrado neste dia.")
+                st.write("Nenhum pedido pago neste dia.")
                 continue
 
-            # Preparar tabela de pedidos
-            dados_pedidos = []
+            dados = []
             total_dia = 0
-            pratos_quantidade = {}
+            pratos = {}
 
             for p in pedidos:
                 itens = View.item_pedido_listar(p.get_id())
-                total_pedido = sum(i.get_quantidade() * i.get_prato().get_preco() for i in itens)
-                total_dia += total_pedido
+                total_pedido = 0
 
                 for i in itens:
-                    nome_prato = i.get_prato().get_nome()
-                    pratos_quantidade[nome_prato] = pratos_quantidade.get(nome_prato, 0) + i.get_quantidade()
+                    total_pedido += i.get_quantidade() * i.get_prato().get_preco()
+                    pratos[i.get_prato().get_nome()] = pratos.get(i.get_prato().get_nome(), 0) + i.get_quantidade()
 
-                dados_pedidos.append({
-                    "ID Pedido": p.get_id(),
+                total_dia += total_pedido
+
+                dados.append({
+                    "Pedido": p.get_id(),
                     "Mesa": p.get_mesa(),
-                    "Garçom": p.get_garcom(),
-                    "Itens": ", ".join([f"{i.get_prato().get_nome()} x{i.get_quantidade()}" for i in itens]),
-                    "Total Pedido (R$)": f"{total_pedido:.2f}"
+                    "Total": f"R$ {total_pedido:.2f}"
                 })
 
-            st.subheader("Pedidos do dia")
-            df_pedidos = pd.DataFrame(dados_pedidos)
-            st.dataframe(df_pedidos, use_container_width=True)
+            st.dataframe(pd.DataFrame(dados), use_container_width=True)
+            st.markdown(f"**Lucro do dia: R$ {total_dia:.2f}**")
 
-            st.markdown(f"**Lucro do dia:** R$ {total_dia:.2f}")
-
-            # Preparar ranking de pratos
-            if pratos_quantidade:
-                st.subheader("Pratos mais vendidos")
-                df_pratos = pd.DataFrame(
-                    sorted(pratos_quantidade.items(), key=lambda x: x[1], reverse=True),
+            st.subheader("Pratos mais vendidos")
+            st.dataframe(
+                pd.DataFrame(
+                    sorted(pratos.items(), key=lambda x: x[1], reverse=True),
                     columns=["Prato", "Quantidade"]
-                )
-                st.dataframe(df_pratos, use_container_width=True)
+                ),
+                use_container_width=True
+            )

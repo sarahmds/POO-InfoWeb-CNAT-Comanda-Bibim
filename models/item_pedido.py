@@ -17,7 +17,6 @@ class ItemPedido:
     def get_pedido(self):
         return self.__pedido
 
-    # ===== SETTERS =====
     def set_prato(self, prato):
         self.__prato = prato
 
@@ -27,7 +26,6 @@ class ItemPedido:
     def set_pedido(self, pedido):
         self.__pedido = pedido
 
-    # ===== MÉTODO DO DIAGRAMA =====
     def subtotal(self) -> float:
         """
         Assume que o objeto Prato possui o método get_preco()

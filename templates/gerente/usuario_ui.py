@@ -8,7 +8,6 @@ class UsuarioUI:
 
     def main():
         st.header("Cadastro de Usuários")
-        # Ordem alterada: Listar primeiro
         tab1, tab2, tab3, tab4 = st.tabs(["Listar", "Cadastrar", "Excluir", "Atualizar"])
 
         with tab1:
@@ -29,7 +28,6 @@ class UsuarioUI:
 
         st.subheader("Usuários cadastrados")
 
-        # Criando DataFrame para tabela
         data = {
             "ID": [u.get_id() for u in usuarios],
             "Nome": [u.get_nome() for u in usuarios],
@@ -38,7 +36,6 @@ class UsuarioUI:
         }
         df = pd.DataFrame(data)
 
-        # Exibir tabela bonita
         st.dataframe(df, use_container_width=True)
 
     # ===== CADASTRAR =====
@@ -106,7 +103,6 @@ class UsuarioUI:
 
         if st.button("Atualizar"):
             try:
-                # Atualizar de verdade usando View
                 View.usuario_atualizar(usuario.get_id(), nome, email, senha, perfil)
                 st.success("Usuário atualizado")
                 time.sleep(1)

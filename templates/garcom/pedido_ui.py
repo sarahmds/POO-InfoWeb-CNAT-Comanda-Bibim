@@ -76,7 +76,7 @@ class PedidoUI:
             time.sleep(1)
             st.rerun()
 
-    # ===== Remover Item (1 por 1) =====
+    # ===== Remover Item =====
     @staticmethod
     def remover_item():
         pedidos = View.pedido_listar()

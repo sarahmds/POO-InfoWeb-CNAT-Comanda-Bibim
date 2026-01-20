@@ -1,4 +1,3 @@
-# models/mesa.py
 class Mesa:
     def __init__(self, numero: int, status: str = "LIVRE", id: int = None):
         self.__id = id

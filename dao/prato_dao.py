@@ -1,4 +1,3 @@
-# dao/prato_dao.py
 from dao.dao import DAO
 from models.prato import Prato
 
@@ -29,7 +28,6 @@ class PratoDAO(DAO):
         sql = "DELETE FROM prato WHERE id = ?"
         cls.executar(sql, (id_prato,))
 
-    # === ADICIONE ESTE MÉTODO ===
     @classmethod
     def buscar_por_id(cls, id_prato):
         sql = "SELECT id, nome, descricao, preco FROM prato WHERE id = ?"

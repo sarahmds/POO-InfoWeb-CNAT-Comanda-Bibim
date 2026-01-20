@@ -54,7 +54,7 @@ class ItemPedidoDAO:
                 prato=prato,
                 quantidade=r[2],
                 pedido=pedido,
-                id=r[0]          # 👈 ID PASSA AQUI
+                id=r[0]
             )
             itens.append(item)
 

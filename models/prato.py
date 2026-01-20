@@ -17,7 +17,6 @@ class Prato:
     def get_preco(self):
         return self.__preco
 
-    # ===== SETTERS =====
     def set_nome(self, nome):
         self.__nome = nome
 

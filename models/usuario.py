@@ -21,7 +21,6 @@ class Usuario:
     def get_perfil(self):
         return self.__perfil
 
-    # SETTERS
     def set_nome(self, nome):
         self.__nome = nome
 

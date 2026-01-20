@@ -22,7 +22,6 @@ class CozinhaUI:
                 st.write("Pedido sem itens.")
                 continue
 
-            # Controle de preparo por unidade
             todas_unidades_prontas = True
 
             for i in itens:
@@ -38,7 +37,6 @@ class CozinhaUI:
                     if not pronto:
                         todas_unidades_prontas = False
 
-            # Botão para marcar pedido como PRONTO
             if p.get_status() in ["ENVIADO", "EM PREPARO"]:
                 if todas_unidades_prontas:
                     if st.button(f"Marcar Pedido {p.get_id()} como PRONTO", key=f"pronto_{p.get_id()}"):
@@ -48,7 +46,6 @@ class CozinhaUI:
                 else:
                     st.warning("Ainda há unidades não preparadas.")
 
-            # Botão para enviar pedido preparado
             if p.get_status() == "PRONTO":
                 if st.button(f"Enviar Pedido {p.get_id()} Preparado", key=f"enviar_{p.get_id()}"):
                     View.pedido_atualizar_status(p.get_id(), "CONCLUÍDO")

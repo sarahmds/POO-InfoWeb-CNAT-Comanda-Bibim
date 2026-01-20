@@ -1,5 +1,7 @@
-import sqlite3
+from datetime import datetime
+
 from database import Database
+
 from models.usuario import Usuario
 from models.mesa import Mesa
 from models.prato import Prato
@@ -14,8 +16,6 @@ from dao.pedido_dao import PedidoDAO
 from dao.itempedido_dao import ItemPedidoDAO
 from dao.dia_dao import DiaDAO
 
-from datetime import datetime
-
 
 class View:
 
@@ -23,9 +23,11 @@ class View:
     @staticmethod
     def usuario_criar_gerente_padrao():
         Database.criar_tabelas()
+
         for u in UsuarioDAO.listar():
             if u.get_email() == "admin@admin.com":
                 return
+
         UsuarioDAO.inserir(
             Usuario("admin", "admin@admin.com", "admin", "GERENTE")
         )
@@ -42,95 +44,34 @@ class View:
         return None
 
     @staticmethod
-    def usuario_inserir(nome, email, senha, perfil):
-        try:
-            UsuarioDAO.inserir(Usuario(nome, email, senha, perfil))
-        except sqlite3.IntegrityError:
-            raise ValueError("E-mail já cadastrado")
-
-    @staticmethod
     def usuario_listar():
         return UsuarioDAO.listar()
 
-    @staticmethod
-    def usuario_atualizar(id_usuario, nome, email, senha, perfil):
-        try:
-            usuario = Usuario(id=id_usuario, nome=nome, email=email, senha=senha, perfil=perfil)
-            UsuarioDAO.atualizar(usuario)
-        except sqlite3.IntegrityError:
-            raise ValueError("E-mail já cadastrado")
-
-    @staticmethod
-    def usuario_excluir(id_usuario):
-        UsuarioDAO.excluir(id_usuario)
-
     # ===== MESA =====
-    @staticmethod
-    def mesa_inserir(numero):
-        MesaDAO.inserir(Mesa(numero))
-
     @staticmethod
     def mesa_listar():
         return MesaDAO.listar()
 
     @staticmethod
-    def mesa_ocupar(id_mesa):
-        for m in MesaDAO.listar():
-            if m.get_id() == id_mesa:
-                m.ocupar()
-                MesaDAO.atualizar(m)
-
-    @staticmethod
     def mesa_liberar(id_mesa):
-        # Busca a mesa
-        mesa = next((m for m in MesaDAO.listar() if m.get_id() == id_mesa), None)
+        mesa = next(
+            (m for m in MesaDAO.listar() if m.get_id() == id_mesa),
+            None
+        )
         if not mesa:
-            return False  # Não liberou
+            return False
 
-        # Verifica se há pedidos vinculados à mesa
-        pedidos = [p for p in PedidoDAO.listar() if p.get_mesa() == id_mesa]
+        pedidos = [
+            p for p in PedidoDAO.listar()
+            if p.get_mesa() == id_mesa
+        ]
 
-        # Se houver pedidos e algum não estiver "PAGO", mostra aviso e não libera
         if pedidos and any(p.get_status() != "PAGO" for p in pedidos):
-            import streamlit as st
-            st.warning("Não é possível liberar a mesa enquanto houver pedidos não pagos.")
-            return False  # Não liberou
+            return False
 
-        # Se não houver pedidos ou todos estiverem pagos, libera a mesa
         mesa.liberar()
         MesaDAO.atualizar(mesa)
-        return True  # Liberou com sucesso
-
-    @staticmethod
-    def mesa_excluir(id_mesa):
-        # Verifica se há pedidos vinculados à mesa
-        pedidos = [p for p in PedidoDAO.listar() if p.get_mesa() == id_mesa]
-        if pedidos:
-            import streamlit as st
-            st.warning("Não é possível excluir a mesa enquanto houver pedidos vinculados.")
-            return False
-        # Se não houver pedidos, exclui a mesa
-        MesaDAO.excluir(id_mesa)
         return True
-
-
-    # ===== PRATO =====
-    @staticmethod
-    def prato_inserir(nome, descricao, preco):
-        PratoDAO.inserir(Prato(nome, descricao, preco))
-
-    @staticmethod
-    def prato_listar():
-        return PratoDAO.listar()
-
-    @staticmethod
-    def prato_excluir(id_prato):
-        PratoDAO.excluir(id_prato)
-
-    @staticmethod
-    def prato_atualizar(id_prato, nome, descricao, preco):
-        prato = Prato(id=id_prato, nome=nome, descricao=descricao, preco=preco)
-        PratoDAO.atualizar(prato)
 
     # ===== PEDIDO =====
     @staticmethod
@@ -145,7 +86,10 @@ class View:
 
     @staticmethod
     def pedido_listar():
-        return PedidoDAO.listar()
+        return [
+            p for p in PedidoDAO.listar()
+            if p.get_status() != "PAGO"
+        ]
 
     @staticmethod
     def pedido_atualizar_status(id_pedido, status):
@@ -153,72 +97,57 @@ class View:
             if p.get_id() == id_pedido:
                 p.atualizarStatus(status)
                 PedidoDAO.atualizar(p)
+                return
 
     @staticmethod
-    def pedidos_do_dia():
-        dia_atual = DiaDAO.dia_aberto()
-        if not dia_atual:
-            return []
-        return PedidoDAO.listar_por_dia(dia_atual.get_id())
+    def pedido_registrar_pagamento(id_pedido):
+        for p in PedidoDAO.listar():
+            if p.get_id() == id_pedido:
+                p.atualizarStatus("PAGO")
+                PedidoDAO.atualizar(p)
+                View.mesa_liberar(p.get_mesa())
+                return
 
     @staticmethod
-    def pedidos_do_dia_id(id_dia):
-        return PedidoDAO.listar_por_dia(id_dia)
-
-    @staticmethod
-    def pedido_excluir(id_pedido):
-        PedidoDAO.excluir(id_pedido)
+    def pedido_por_mesa(id_mesa):
+        """
+        Retorna um pedido ativo da mesa (não pago).
+        Impede criar mais de um pedido por mesa.
+        """
+        for p in PedidoDAO.listar():
+            if p.get_mesa() == id_mesa and p.get_status() != "PAGO":
+                return p
+        return None
 
     # ===== ITEM PEDIDO =====
-    @staticmethod
-    def item_pedido_inserir(pedido, prato, quantidade):
-        ItemPedidoDAO.inserir(ItemPedido(prato, quantidade, pedido))
-
     @staticmethod
     def item_pedido_listar(id_pedido):
         return ItemPedidoDAO.listar_por_pedido(id_pedido)
 
+    # ===== PRATO =====
     @staticmethod
-    def item_pedido_excluir(id_item):
-        ItemPedidoDAO.excluir(id_item)
-
-    @staticmethod
-    def item_pedido_atualizar(item):
-        ItemPedidoDAO.atualizar(item)
+    def prato_listar():
+        return PratoDAO.listar()
 
     # ===== DIA =====
     @staticmethod
-    def dia_abrir():
-        conn = Database.conectar()
-        conn.execute("INSERT INTO dia (data, aberto) VALUES (date('now'), 1)")
-        conn.commit()
-        conn.close()
-
-    @staticmethod
-    def dia_fechar():
-        conn = Database.conectar()
-        conn.execute("UPDATE dia SET aberto = 0 WHERE aberto = 1")
-        conn.commit()
-        conn.close()
+    def listar_dias():
+        return DiaDAO.listar()
 
     @staticmethod
     def dia_aberto():
-        conn = Database.conectar()
-        cur = conn.cursor()
-        cur.execute("SELECT COUNT(*), id FROM dia WHERE aberto = 1")
-        resultado = cur.fetchone()
-        conn.close()
-        if resultado[0] > 0:
-            return DiaDAO.buscar_por_id(resultado[1])
-        return None
+        return DiaDAO.dia_aberto()
 
     @staticmethod
-    def listar_dias():
-        return DiaDAO.listar()
-    # ===== PEDIDO POR MESA =====
+    def pedidos_do_dia():
+        dia = DiaDAO.dia_aberto()
+        if not dia:
+            return []
+        return PedidoDAO.listar_por_dia(dia.get_id())
+
     @staticmethod
-    def pedido_por_mesa(id_mesa):
-        for p in PedidoDAO.listar():
-            if p.get_mesa() == id_mesa and p.get_status() in ["ABERTO", "EM ANDAMENTO"]:
-                return p
-        return None
+    def pedidos_do_dia_id(id_dia):
+        return [
+            p for p in PedidoDAO.listar_por_dia(id_dia)
+            if p.get_status() == "PAGO"
+        ]
