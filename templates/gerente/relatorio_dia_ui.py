@@ -7,7 +7,7 @@ class RelatorioDiaUI:
     def main():
         st.header("Relatório do Dia")
 
-        dias = View.listar_dias()
+        dias = View.dia_listar()
         if not dias:
             st.write("Nenhum dia registrado.")
             return
