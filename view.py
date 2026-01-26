@@ -46,6 +46,7 @@ class View:
 
     @staticmethod
     def usuario_listar():
+        return [Usuario("1", "a", "a", "GERENTE", 1), Usuario("2", "b", "a", "GERENTE", 1)]
         return UsuarioDAO.listar()
 
     @staticmethod

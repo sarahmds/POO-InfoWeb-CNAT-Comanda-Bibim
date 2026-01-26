@@ -20,7 +20,7 @@ class UsuarioUI:
             UsuarioUI.excluir()
         with tab4:
             UsuarioUI.atualizar()
-
+    
     # ===== LISTAR =====
     def listar():
         usuarios = View.usuario_listar()
@@ -61,12 +61,13 @@ class UsuarioUI:
     # ===== EXCLUIR =====
     def excluir():
         usuarios = View.usuario_listar()
+
         if not usuarios:
             st.write("Nenhum usuário cadastrado")
             return
-
+       
         usuario = st.selectbox(
-            "Usuário",
+            "Usuário", 
             usuarios,
             format_func=lambda u: f"{u.get_nome()} ({u.get_email()})",
             key="usuario_excluir"
@@ -81,6 +82,7 @@ class UsuarioUI:
     # ===== ATUALIZAR =====
     def atualizar():
         usuarios = View.usuario_listar()
+        
         if not usuarios:
             st.write("Nenhum usuário cadastrado")
             return
@@ -126,3 +128,4 @@ class UsuarioUI:
             st.success("Usuário atualizado")
             time.sleep(1)
             st.rerun()
+ 
