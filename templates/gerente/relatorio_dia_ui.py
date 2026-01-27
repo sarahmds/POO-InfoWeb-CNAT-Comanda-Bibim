@@ -1,9 +1,9 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
+import plotly.express as px
 from view import View
 
-class RelatorioUI:
+class RelatorioDiaUI:
 
     @staticmethod
     def main():
@@ -51,22 +51,34 @@ class RelatorioUI:
                 use_container_width=True
             )
 
-        # ===== Gráfico de Lucro Diário =====
-        st.divider()
-        st.subheader("Lucro total por dia")
+# ===== Gráfico de Lucro Diário em Pizza =====
+st.divider()
+st.subheader("Lucro total por dia")
 
-        dados_grafico = View.lucro_por_dia()
-        if not dados_grafico:
-            st.write("Nenhum dado para o gráfico.")
-            return
+dados_grafico = View.lucro_por_dia()
+if not dados_grafico:
+    st.write("Nenhum dado para o gráfico.")
+else:
+    df = pd.DataFrame(dados_grafico)
+    df["data"] = pd.to_datetime(df["data"])
+    df = df.sort_values("data")
 
-        df = pd.DataFrame(dados_grafico)
-        df["data"] = pd.to_datetime(df["data"])
-        df = df.sort_values("data")
+    # Gráfico de pizza
+    fig = px.pie(
+        df,
+        values="lucro",
+        names="lucro",  # nomes internos não serão exibidos
+        hover_data=["data"],  # mostra apenas a data no hover
+        title="Lucro diário",
+    )
 
-        fig, ax = plt.subplots()
-        ax.plot(df["data"], df["lucro"], drawstyle="steps-post", marker="o")
-        ax.set_xlabel("Dia")
-        ax.set_ylabel("Lucro (R$)")
-        ax.set_title("Lucro diário")
-        st.pyplot(fig)
+    # Remove a legenda
+    fig.update_layout(showlegend=False)
+
+    # Ajuste do texto dentro da pizza (opcional)
+    fig.update_traces(
+        textinfo="none",  # sem texto dentro das fatias
+        hovertemplate="Dia: %{customdata[0]}<br>Lucro: R$ %{value:.2f}<extra></extra>"
+    )
+
+    st.plotly_chart(fig, use_container_width=True)

@@ -9,6 +9,7 @@ from templates.gerente.prato_ui import PratoUI
 from templates.gerente.gerenciar_dia_ui import GerenciarDiaUI
 from templates.gerente.relatorio_dia_ui import RelatorioDiaUI
 
+
 from templates.garcom.pedido_ui import PedidoUI
 from templates.garcom.pedidos_mesa_ui import PedidosMesaUI
 
