@@ -5,7 +5,7 @@ from view import View
 class RelatorioDiaUI:
 
     def main():
-        st.header("Relatório do Dia")
+        st.header("relatorio")
 
         dias = View.dia_listar()
         if not dias:

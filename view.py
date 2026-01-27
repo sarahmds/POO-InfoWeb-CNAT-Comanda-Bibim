@@ -181,7 +181,12 @@ class View:
         return ItemPedidoDAO.listar_por_pedido(id_pedido)
 
     @staticmethod
-    def item_pedido_inserir(item):
+    def item_pedido_inserir(pedido, prato, quantidade):
+        item = ItemPedido(
+            prato,
+            quantidade,
+            pedido
+        )
         ItemPedidoDAO.inserir(item)
 
     @staticmethod

@@ -7,7 +7,7 @@ class CozinhaUI:
     def main():
         st.header("Pedidos na Cozinha")
 
-        pedidos = View.pedido_listar()
+        pedidos = [p for p in View.pedido_listar() if p.get_status() != "PAGO"]
         pedidos_cozinha = [p for p in pedidos if p.get_status() in ["ENVIADO", "EM PREPARO", "PRONTO"]]
 
         if not pedidos_cozinha:

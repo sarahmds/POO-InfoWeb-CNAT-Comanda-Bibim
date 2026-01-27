@@ -48,7 +48,7 @@ O banco de dados SQLite armazenará informações de mesas, usuários, pratos, p
 - Gerenciar cardápio 
 - Consultar mesas
 - perquisar pratos
-- Relatório do dia 
+- relatorio 
 ### 2. Garçom
 - Login
 - Consultar mesas  
@@ -95,7 +95,7 @@ O banco de dados SQLite armazenará informações de mesas, usuários, pratos, p
 | RF12  | Atualizar status do pedido| Atualizar status (em preparo/concluído)| alta|
 | RF13  | Listar pedidos por mesa| Exibir pedidos de uma mesa específica| média|
 | RF14  | perquisar pratos| Buscar mesas, pratos ou pedidos| média|
-| RF15  | Relatório do dia| Exibir gráficos de vendas| alta|
+| RF15  | relatorio| Exibir gráficos de vendas| alta|
 
 
 ## 8. Requisitos Não-funcionais

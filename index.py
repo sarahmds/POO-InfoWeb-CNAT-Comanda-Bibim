@@ -33,7 +33,7 @@ class IndexUI:
                 "Mesas",
                 "Cardápio",
                 "Gerenciar Dia",
-                "Relatório do Dia",
+                "relatorio",
                 "Pesquisa"
             ]
         )
@@ -41,7 +41,7 @@ class IndexUI:
         if op == "Mesas": MesaUI.main()
         if op == "Cardápio": PratoUI.main()
         if op == "Gerenciar Dia": GerenciarDiaUI.main()
-        if op == "Relatório do Dia": RelatorioDiaUI.main()
+        if op == "relatorio": RelatorioDiaUI.main()
         if op == "Pesquisa": PesquisaUI.main()
 
     def menu_garcom():

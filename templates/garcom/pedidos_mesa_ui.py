@@ -20,7 +20,7 @@ class PedidosMesaUI:
             key="mesa_pedidos"
         )
 
-        pedidos = View.pedido_listar()
+        pedidos = [p for p in View.pedido_listar() if p.get_status() != "PAGO"]
         pedidos_mesa = [p for p in pedidos if p.get_mesa() == mesa.get_id()]
 
         if not pedidos_mesa:
