@@ -7,35 +7,35 @@ class PedidoUI:
 
     @staticmethod
     def main():
-        st.header("Pedidos")
+        st.header("Gerenciamento de Pedidos")
         tab1, tab2, tab3, tab4 = st.tabs(
-            ["inserir pedido", "Adicionar Item", "Remover Item", "Listar Pedidos"]
+            ["Criar Pedido", "Adicionar Item", "Remover Item", "Consultar Pedidos"]
         )
         with tab1: PedidoUI.inserir_pedido()
         with tab2: PedidoUI.adicionar_item()
         with tab3: PedidoUI.remover_item()
         with tab4: PedidoUI.listar_pedidos()
 
-    # ===== inserir Pedido =====
+    # ===== Criar Pedido =====
     @staticmethod
     def inserir_pedido():
         mesas_ocupadas = [m for m in View.mesa_listar() if m.get_status() == "OCUPADA"]
         mesas_sem_pedido = [m for m in mesas_ocupadas if not View.pedido_por_mesa(m.get_id())]
 
         if not mesas_sem_pedido:
-            st.warning("Nenhuma mesa disponível.")
+            st.warning("Não há mesas ocupadas sem pedido aberto.")
             return
 
         mesa = st.selectbox(
-            "Mesa",
+            "Selecione a mesa",
             mesas_sem_pedido,
             format_func=lambda m: f"Mesa {m.get_id()}",
             key="mesa_inserir_pedido"
         )
 
-        if st.button("inserir pedido", key="btn_inserir_pedido"):
+        if st.button("Criar pedido", key="btn_inserir_pedido"):
             View.pedido_inserir(mesa.get_id(), st.session_state["usuario_id"])
-            st.success("Pedido criado")
+            st.success("Pedido criado com sucesso.")
             time.sleep(1)
             st.rerun()
 
@@ -45,19 +45,23 @@ class PedidoUI:
         pedidos = View.pedido_listar()
         pratos = View.prato_listar()
 
-        if not pedidos or not pratos:
-            st.warning("Nenhum pedido ou prato disponível.")
+        if not pedidos:
+            st.warning("Não existem pedidos cadastrados.")
+            return
+
+        if not pratos:
+            st.warning("Não existem pratos cadastrados.")
             return
 
         pedido = st.selectbox(
-            "Pedido",
+            "Selecione o pedido",
             pedidos,
             format_func=lambda p: f"Pedido {p.get_id()} (Mesa {p.get_mesa()})",
             key="pedido_add_item"
         )
 
         prato = st.selectbox(
-            "Prato",
+            "Selecione o prato",
             pratos,
             format_func=lambda p: p.get_nome(),
             key="prato_add_item"
@@ -70,9 +74,9 @@ class PedidoUI:
             key="qtd_add_item"
         )
 
-        if st.button("Adicionar item", key="btn_add_item"):
+        if st.button("Adicionar item ao pedido", key="btn_add_item"):
             View.item_pedido_inserir(pedido, prato, qtd)
-            st.success("Item adicionado")
+            st.success("Item adicionado ao pedido.")
             time.sleep(1)
             st.rerun()
 
@@ -81,11 +85,11 @@ class PedidoUI:
     def remover_item():
         pedidos = View.pedido_listar()
         if not pedidos:
-            st.warning("Nenhum pedido disponível.")
+            st.warning("Não há pedidos disponíveis.")
             return
 
         pedido = st.selectbox(
-            "Pedido",
+            "Selecione o pedido",
             pedidos,
             format_func=lambda p: f"Pedido {p.get_id()} (Mesa {p.get_mesa()})",
             key="pedido_remover_item"
@@ -93,7 +97,7 @@ class PedidoUI:
 
         itens = View.item_pedido_listar(pedido.get_id())
         if not itens:
-            st.write("Nenhum item neste pedido.")
+            st.info("Este pedido não possui itens.")
             return
 
         df = pd.DataFrame([{
@@ -105,9 +109,9 @@ class PedidoUI:
         st.dataframe(df, hide_index=True)
 
         item = st.selectbox(
-            "Item",
+            "Selecione o item",
             itens,
-            format_func=lambda i: f"{i.get_prato().get_nome()} ( {i.get_quantidade()})",
+            format_func=lambda i: f"{i.get_prato().get_nome()} (Qtd: {i.get_quantidade()})",
             key="item_unitario_remover"
         )
 
@@ -115,25 +119,25 @@ class PedidoUI:
             if item.get_quantidade() > 1:
                 item.set_quantidade(item.get_quantidade() - 1)
                 View.item_pedido_atualizar(item)
-                st.success("1 unidade removida")
+                st.success("Uma unidade foi removida do item.")
             else:
                 View.item_pedido_excluir(item.get_id())
-                st.success("Item removido")
+                st.success("Item removido do pedido.")
 
             time.sleep(1)
             st.rerun()
 
-    # ===== Listar / Enviar / Cancelar =====
+    # ===== Consultar / Enviar / Cancelar =====
     @staticmethod
     def listar_pedidos():
         pedidos = View.pedido_listar()
         if not pedidos:
-            st.write("Nenhum pedido cadastrado.")
+            st.info("Nenhum pedido registrado até o momento.")
             return
 
         for p in pedidos:
             st.subheader(
-                f"Pedido {p.get_id()} - Mesa {p.get_mesa()} - Status: {p.get_status()}"
+                f"Pedido {p.get_id()} | Mesa {p.get_mesa()} | Status: {p.get_status()}"
             )
 
             itens = View.item_pedido_listar(p.get_id())
@@ -151,23 +155,23 @@ class PedidoUI:
 
             if dados:
                 st.dataframe(pd.DataFrame(dados), hide_index=True)
-                st.write(f"**Total: R$ {total:.2f}**")
+                st.markdown(f"**Total do pedido: R$ {total:.2f}**")
             else:
-                st.write("Nenhum item neste pedido.")
+                st.info("Pedido sem itens adicionados.")
 
             if p.get_status() == "ABERTO":
                 if itens:
-                    if st.button(f"Enviar Pedido {p.get_id()}", key=f"enviar_{p.get_id()}"):
+                    if st.button(f"Enviar pedido {p.get_id()} para a cozinha", key=f"enviar_{p.get_id()}"):
                         View.pedido_atualizar_status(p.get_id(), "ENVIADO")
-                        st.success("Pedido enviado para a cozinha")
+                        st.success("Pedido enviado para a cozinha.")
                         st.rerun()
                 else:
-                    st.warning("Pedido sem itens não pode ser enviado.")
+                    st.warning("Não é possível enviar um pedido sem itens.")
 
-            if st.button(f"Cancelar Pedido {p.get_id()}", key=f"cancelar_{p.get_id()}"):
+            if st.button(f"Cancelar pedido {p.get_id()}", key=f"cancelar_{p.get_id()}"):
                 for i in itens:
                     View.item_pedido_excluir(i.get_id())
                 View.pedido_excluir(p.get_id())
-                st.success("Pedido cancelado")
+                st.success("Pedido cancelado com sucesso.")
                 time.sleep(1)
                 st.rerun()
