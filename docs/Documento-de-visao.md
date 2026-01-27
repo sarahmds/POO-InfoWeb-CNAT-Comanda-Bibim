@@ -47,7 +47,7 @@ O banco de dados SQLite armazenará informações de mesas, usuários, pratos, p
 - Gerenciar mesas
 - Gerenciar cardápio 
 - Consultar mesas
-- Pesquisa geral
+- perquisar pratos
 - Relatório do dia 
 ### 2. Garçom
 - Login
@@ -57,7 +57,7 @@ O banco de dados SQLite armazenará informações de mesas, usuários, pratos, p
 - Adicionar itens ao pedido
 - Enviar pedido para cozinha
 - Listar pedidos por mesa
-- Pesquisa geral
+- perquisar pratos
 
 ### 3. Chef
 - Login
@@ -94,7 +94,7 @@ O banco de dados SQLite armazenará informações de mesas, usuários, pratos, p
 | RF11  | Listar pedidos na cozinha | Exibir pedidos pendentes para preparo| alta|
 | RF12  | Atualizar status do pedido| Atualizar status (em preparo/concluído)| alta|
 | RF13  | Listar pedidos por mesa| Exibir pedidos de uma mesa específica| média|
-| RF14  | Pesquisa geral| Buscar mesas, pratos ou pedidos| média|
+| RF14  | perquisar pratos| Buscar mesas, pratos ou pedidos| média|
 | RF15  | Relatório do dia| Exibir gráficos de vendas| alta|
 
 

@@ -5,7 +5,7 @@ from view import View
 class PesquisaUI:
 
     def main():
-        st.header("Pesquisa Geral")
+        st.header("perquisar pratos")
         termo = st.text_input("Buscar")
 
         if termo == "":
