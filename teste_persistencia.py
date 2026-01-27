@@ -13,7 +13,7 @@ from dao.itempedido_dao import ItemPedidoDAO
 
 print("=== TESTE DE prato ===")
 
-Database.criar_tabelas()
+Database.inserir_tabelas()
 
 prato = Prato("Kimchi", "conserva coreana tradicional de vegetais fermentados", 35.0)
 PratoDAO.inserir(prato)
@@ -29,7 +29,7 @@ for p in PratoDAO.listar():
 
 print("=== TESTE DE MESA ===")
 
-Database.criar_tabelas()
+Database.inserir_tabelas()
 
 mesa1 = Mesa(1, "OCUPADA")  
 MesaDAO.inserir(mesa1)
@@ -44,7 +44,7 @@ for m in MesaDAO.listar():
 
 print("=== TESTE DE USUÁRIO ===")
 
-Database.criar_tabelas()
+Database.inserir_tabelas()
 
 u1 = Usuario("João Silva", "joao@example.com", "1234", "GARCOM")
 UsuarioDAO.inserir(u1)
@@ -63,7 +63,7 @@ for u in UsuarioDAO.listar():
 
 print("=== TESTE DE PEDIDO E ITEM_PEDIDO ===")
 
-Database.criar_tabelas()
+Database.inserir_tabelas()
 
 prato1 = Prato("Kimchi", "Conserva coreana", 35.0)
 prato2 = Prato("Tteokbokki", "Bolinhos de arroz", 40.0)

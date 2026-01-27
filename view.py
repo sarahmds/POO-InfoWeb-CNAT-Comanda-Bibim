@@ -24,29 +24,7 @@ class View:
 
     # ===== USUÁRIO =====
     @staticmethod
-    def usuario_criar_gerente_padrao():
-        Database.criar_tabelas()
-        for u in UsuarioDAO.listar():
-            if u.get_email() == "admin@admin.com":
-                return
-        UsuarioDAO.inserir(
-            Usuario("admin", "admin@admin.com", "admin", "GERENTE")
-        )
-
-    @staticmethod
-    def usuario_autenticar(email, senha):
-        for u in UsuarioDAO.listar():
-            if u.get_email() == email and u.get_senha() == senha:
-                return {
-                    "id": u.get_id(),
-                    "nome": u.get_nome(),
-                    "perfil": u.get_perfil()
-                }
-        return None
-
-    @staticmethod
     def usuario_listar():
-        return [Usuario("1", "a", "a", "GERENTE", 1), Usuario("2", "b", "a", "GERENTE", 1)]
         return UsuarioDAO.listar()
 
     @staticmethod
@@ -64,6 +42,26 @@ class View:
     @staticmethod
     def usuario_excluir(id_usuario):
         UsuarioDAO.excluir(id_usuario)
+
+    @staticmethod
+    def usuario_autenticar(email, senha):
+        for u in UsuarioDAO.listar():
+            if u.get_email() == email and u.get_senha() == senha:
+                return {
+                    "id": u.get_id(),
+                    "nome": u.get_nome(),
+                    "perfil": u.get_perfil()
+                }
+        return None
+    @staticmethod
+    def usuario_inserir_gerente_padrao():
+        Database.criar_tabelas()
+        for u in UsuarioDAO.listar():
+            if u.get_email() == "admin@admin.com":
+                return
+        UsuarioDAO.inserir(
+            Usuario("admin", "admin@admin.com", "admin", "GERENTE")
+        )
 
     # ===== MESA =====
     @staticmethod
@@ -84,18 +82,11 @@ class View:
 
     @staticmethod
     def mesa_liberar(id_mesa):
-        mesa = next(
-            (m for m in MesaDAO.listar() if m.get_id() == id_mesa),
-            None
-        )
+        mesa = next((m for m in MesaDAO.listar() if m.get_id() == id_mesa), None)
         if not mesa:
             return False
 
-        pedidos = [
-            p for p in PedidoDAO.listar()
-            if p.get_mesa() == id_mesa
-        ]
-
+        pedidos = [p for p in PedidoDAO.listar() if p.get_mesa() == id_mesa]
         if pedidos and any(p.get_status() != "PAGO" for p in pedidos):
             return False
 
@@ -123,10 +114,7 @@ class View:
     # ===== PEDIDO =====
     @staticmethod
     def pedido_listar():
-        return [
-            p for p in PedidoDAO.listar()
-            if p.get_status() != "PAGO"
-        ]
+        return PedidoDAO.listar()
 
     @staticmethod
     def pedido_inserir(id_mesa, id_garcom):
@@ -147,6 +135,13 @@ class View:
         PedidoDAO.excluir(id_pedido)
 
     @staticmethod
+    def pedido_por_mesa(id_mesa):
+        for p in PedidoDAO.listar():
+            if p.get_mesa() == id_mesa and p.get_status() != "PAGO":
+                return p
+        return None
+
+    @staticmethod
     def pedido_atualizar_status(id_pedido, status):
         for p in PedidoDAO.listar():
             if p.get_id() == id_pedido:
@@ -162,13 +157,6 @@ class View:
                 PedidoDAO.atualizar(p)
                 View.mesa_liberar(p.get_mesa())
                 return
-
-    @staticmethod
-    def pedido_por_mesa(id_mesa):
-        for p in PedidoDAO.listar():
-            if p.get_mesa() == id_mesa and p.get_status() != "PAGO":
-                return p
-        return None
 
     # ===== ITEM PEDIDO =====
     @staticmethod
@@ -214,10 +202,3 @@ class View:
         if not dia:
             return []
         return PedidoDAO.listar_por_dia(dia.get_id())
-
-    @staticmethod
-    def pedidos_do_dia_id(id_dia):
-        return [
-            p for p in PedidoDAO.listar_por_dia(id_dia)
-            if p.get_status() == "PAGO"
-        ]

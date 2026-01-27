@@ -94,7 +94,7 @@ class IndexUI:
             IndexUI.sair()
 
     def main():
-        View.usuario_criar_gerente_padrao()
+        View.usuario_inserir_gerente_padrao()
         IndexUI.sidebar()
 
 

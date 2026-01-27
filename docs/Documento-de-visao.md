@@ -84,8 +84,8 @@ O banco de dados SQLite armazenará informações de mesas, usuários, pratos, p
 | RF01  | Cadastro de usuários| Registrar usuários com perfis (gerente, garçom, chef)| alta|
 | RF02  | Login| Autenticação e controle de acesso| alta|
 | RF03  | Gerenciar dia| Abrir e fechar o dia no sistema| alta|
-| RF04  | Gerenciar mesas| Criar, editar, listar e excluir mesas| alta|
-| RF05  | Gerenciar cardápio| Criar, editar, listar e excluir pratos| alta|
+| RF04  | Gerenciar mesas| inserir, editar, listar e excluir mesas| alta|
+| RF05  | Gerenciar cardápio| inserir, editar, listar e excluir pratos| alta|
 | RF06  | Consultar mesas| Visualizar lista e status das mesas| alta|
 | RF07  | Ocupar e liberar mesas| Alterar status da mesa (livre/ocupada)| alta|
 | RF08  | Gerenciar pedidos| Registrar pedido vinculado à mesa| alta|

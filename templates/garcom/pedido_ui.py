@@ -9,16 +9,16 @@ class PedidoUI:
     def main():
         st.header("Pedidos")
         tab1, tab2, tab3, tab4 = st.tabs(
-            ["Criar pedido", "Adicionar Item", "Remover Item", "Listar Pedidos"]
+            ["inserir pedido", "Adicionar Item", "Remover Item", "Listar Pedidos"]
         )
-        with tab1: PedidoUI.criar_pedido()
+        with tab1: PedidoUI.inserir_pedido()
         with tab2: PedidoUI.adicionar_item()
         with tab3: PedidoUI.remover_item()
         with tab4: PedidoUI.listar_pedidos()
 
-    # ===== Criar Pedido =====
+    # ===== inserir Pedido =====
     @staticmethod
-    def criar_pedido():
+    def inserir_pedido():
         mesas_ocupadas = [m for m in View.mesa_listar() if m.get_status() == "OCUPADA"]
         mesas_sem_pedido = [m for m in mesas_ocupadas if not View.pedido_por_mesa(m.get_id())]
 
@@ -30,11 +30,11 @@ class PedidoUI:
             "Mesa",
             mesas_sem_pedido,
             format_func=lambda m: f"Mesa {m.get_id()}",
-            key="mesa_criar_pedido"
+            key="mesa_inserir_pedido"
         )
 
-        if st.button("Criar pedido", key="btn_criar_pedido"):
-            View.pedido_criar(mesa.get_id(), st.session_state["usuario_id"])
+        if st.button("inserir pedido", key="btn_inserir_pedido"):
+            View.pedido_inserir(mesa.get_id(), st.session_state["usuario_id"])
             st.success("Pedido criado")
             time.sleep(1)
             st.rerun()
