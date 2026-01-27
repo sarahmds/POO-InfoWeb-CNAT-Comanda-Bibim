@@ -30,9 +30,11 @@ class View:
     def usuario_inserir(nome, email, senha, perfil):
         try:
             UsuarioDAO.inserir(Usuario(nome, email, senha, perfil))
-            return True
+            return True, "Usuário inserido com sucesso"
         except sqlite3.IntegrityError:
-            return False
+            return False, "Erro: email já cadastrado"
+        except Exception as e:
+            return False, f"Erro inesperado: {str(e)}"
 
     @staticmethod
     def usuario_atualizar(usuario):
@@ -105,12 +107,19 @@ class View:
         return PratoDAO.listar()
 
     @staticmethod
-    def prato_inserir(nome, preco):
-        PratoDAO.inserir(Prato(nome, preco))
+    def prato_inserir(nome, descricao, preco):
+        PratoDAO.inserir(Prato(nome, descricao, preco))
+
 
     @staticmethod
-    def prato_atualizar(prato):
-        PratoDAO.atualizar(prato)
+    def prato_atualizar(id_prato, nome, descricao, preco):
+        prato = next((p for p in PratoDAO.listar() if p.get_id() == id_prato), None)
+        if prato:
+            prato.set_nome(nome)
+            prato.set_descricao(descricao)
+            prato.set_preco(preco)
+            PratoDAO.atualizar(prato)
+
 
     @staticmethod
     def prato_excluir(id_prato):

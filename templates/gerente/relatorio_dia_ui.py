@@ -36,49 +36,47 @@ class RelatorioDiaUI:
                 dados.append({
                     "Pedido": p.get_id(),
                     "Mesa": p.get_mesa(),
-                    "Total": f"R$ {total_pedido:.2f}"
+                    "Total (R$)": f"{total_pedido:.2f}"
                 })
 
+            # Tabela de pedidos do dia
             st.dataframe(pd.DataFrame(dados), use_container_width=True)
             st.markdown(f"**Lucro do dia: R$ {total_dia:.2f}**")
 
+            # Tabela de pratos mais vendidos
             st.subheader("Pratos mais vendidos")
-            st.dataframe(
-                pd.DataFrame(
-                    sorted(pratos.items(), key=lambda x: x[1], reverse=True),
-                    columns=["Prato", "Quantidade"]
-                ),
-                use_container_width=True
+            df_pratos = pd.DataFrame(
+                sorted(pratos.items(), key=lambda x: x[1], reverse=True),
+                columns=["Prato", "Quantidade"]
+            )
+            st.dataframe(df_pratos, use_container_width=True)
+
+        # ===== Gráfico de Lucro Diário em Pizza =====
+        st.divider()
+        st.subheader("Lucro total por dia")
+
+        dados_grafico = View.lucro_por_dia()
+        if not dados_grafico:
+            st.write("Nenhum dado para o gráfico.")
+        else:
+            df = pd.DataFrame(dados_grafico)
+            df["data"] = pd.to_datetime(df["data"])
+            df = df.sort_values("data")
+
+            # Gráfico de pizza com cada dia como fatia
+            fig = px.pie(
+                df,
+                values="lucro",
+                names=df["data"].dt.strftime("%d/%m/%Y"),  # cada dia como fatia
+                hover_data=["lucro"],
+                title="Lucro diário",
             )
 
-# ===== Gráfico de Lucro Diário em Pizza =====
-st.divider()
-st.subheader("Lucro total por dia")
+            # Ajustes visuais
+            fig.update_traces(
+                textinfo="percent+label",  # mostra percentual e o dia
+                hovertemplate="Dia: %{label}<br>Lucro: R$ %{value:.2f}<extra></extra>"
+            )
+            fig.update_layout(showlegend=True)
 
-dados_grafico = View.lucro_por_dia()
-if not dados_grafico:
-    st.write("Nenhum dado para o gráfico.")
-else:
-    df = pd.DataFrame(dados_grafico)
-    df["data"] = pd.to_datetime(df["data"])
-    df = df.sort_values("data")
-
-    # Gráfico de pizza
-    fig = px.pie(
-        df,
-        values="lucro",
-        names="lucro",  # nomes internos não serão exibidos
-        hover_data=["data"],  # mostra apenas a data no hover
-        title="Lucro diário",
-    )
-
-    # Remove a legenda
-    fig.update_layout(showlegend=False)
-
-    # Ajuste do texto dentro da pizza (opcional)
-    fig.update_traces(
-        textinfo="none",  # sem texto dentro das fatias
-        hovertemplate="Dia: %{customdata[0]}<br>Lucro: R$ %{value:.2f}<extra></extra>"
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True)
