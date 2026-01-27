@@ -1,11 +1,13 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 from view import View
 
-class RelatorioDiaUI:
+class RelatorioUI:
 
+    @staticmethod
     def main():
-        st.header("relatorio")
+        st.header("Relatório do Dia")
 
         dias = View.dia_listar()
         if not dias:
@@ -27,13 +29,10 @@ class RelatorioDiaUI:
             for p in pedidos:
                 itens = View.item_pedido_listar(p.get_id())
                 total_pedido = 0
-
                 for i in itens:
                     total_pedido += i.get_quantidade() * i.get_prato().get_preco()
                     pratos[i.get_prato().get_nome()] = pratos.get(i.get_prato().get_nome(), 0) + i.get_quantidade()
-
                 total_dia += total_pedido
-
                 dados.append({
                     "Pedido": p.get_id(),
                     "Mesa": p.get_mesa(),
@@ -51,3 +50,23 @@ class RelatorioDiaUI:
                 ),
                 use_container_width=True
             )
+
+        # ===== Gráfico de Lucro Diário =====
+        st.divider()
+        st.subheader("Lucro total por dia")
+
+        dados_grafico = View.lucro_por_dia()
+        if not dados_grafico:
+            st.write("Nenhum dado para o gráfico.")
+            return
+
+        df = pd.DataFrame(dados_grafico)
+        df["data"] = pd.to_datetime(df["data"])
+        df = df.sort_values("data")
+
+        fig, ax = plt.subplots()
+        ax.plot(df["data"], df["lucro"], drawstyle="steps-post", marker="o")
+        ax.set_xlabel("Dia")
+        ax.set_ylabel("Lucro (R$)")
+        ax.set_title("Lucro diário")
+        st.pyplot(fig)

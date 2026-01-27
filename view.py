@@ -1,6 +1,5 @@
 from datetime import datetime
 import sqlite3
-
 from database import Database
 
 # ===== MODELS =====
@@ -47,11 +46,7 @@ class View:
     def usuario_autenticar(email, senha):
         for u in UsuarioDAO.listar():
             if u.get_email() == email and u.get_senha() == senha:
-                return {
-                    "id": u.get_id(),
-                    "nome": u.get_nome(),
-                    "perfil": u.get_perfil()
-                }
+                return {"id": u.get_id(), "nome": u.get_nome(), "perfil": u.get_perfil()}
         return None
 
     @staticmethod
@@ -60,9 +55,7 @@ class View:
         for u in UsuarioDAO.listar():
             if u.get_email() == "admin@admin.com":
                 return
-        UsuarioDAO.inserir(
-            Usuario("admin", "admin@admin.com", "admin", "GERENTE")
-        )
+        UsuarioDAO.inserir(Usuario("admin", "admin@admin.com", "admin", "GERENTE"))
 
     # ================= MESA =================
     @staticmethod
@@ -96,12 +89,9 @@ class View:
         if not mesa:
             return False
 
-        # bloqueia apenas se houver pedido NÃO PAGO
         pedidos_abertos = [
-            p for p in PedidoDAO.listar()
-            if p.get_mesa() == id_mesa and p.get_status() != "PAGO"
+            p for p in PedidoDAO.listar() if p.get_mesa() == id_mesa and p.get_status() != "PAGO"
         ]
-
         if pedidos_abertos:
             return False
 
@@ -182,11 +172,7 @@ class View:
 
     @staticmethod
     def item_pedido_inserir(pedido, prato, quantidade):
-        item = ItemPedido(
-            prato,
-            quantidade,
-            pedido
-        )
+        item = ItemPedido(prato, quantidade, pedido)
         ItemPedidoDAO.inserir(item)
 
     @staticmethod
@@ -206,12 +192,7 @@ class View:
     def dia_abrir():
         if DiaDAO.dia_aberto():
             return
-        DiaDAO.inserir(
-            Dia(
-                data=datetime.now().strftime("%Y-%m-%d"),
-                aberto=1
-            )
-        )
+        DiaDAO.inserir(Dia(data=datetime.now().strftime("%Y-%m-%d"), aberto=1))
 
     @staticmethod
     def dia_fechar():
@@ -236,7 +217,23 @@ class View:
         dia = DiaDAO.dia_aberto()
         if not dia:
             return []
-        return [
-            p for p in PedidoDAO.listar_por_dia(dia.get_id())
-            if p.get_status() == "PAGO"
-        ]
+        return [p for p in PedidoDAO.listar_por_dia(dia.get_id()) if p.get_status() == "PAGO"]
+
+    @staticmethod
+    def pedidos_do_dia_id(dia_id):
+        return [p for p in PedidoDAO.listar_por_dia(dia_id) if p.get_status() == "PAGO"]
+
+    @staticmethod
+    def lucro_por_dia():
+        dias = DiaDAO.listar()
+        resultado = []
+        for dia in dias:
+            pedidos = PedidoDAO.listar_por_dia(dia.get_id())
+            total = 0
+            for p in pedidos:
+                if p.get_status() == "PAGO":
+                    itens = ItemPedidoDAO.listar_por_pedido(p.get_id())
+                    for i in itens:
+                        total += i.get_quantidade() * i.get_prato().get_preco()
+            resultado.append({"data": dia.get_data(), "lucro": total})
+        return resultado
