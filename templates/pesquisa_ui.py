@@ -5,27 +5,22 @@ from view import View
 class PesquisaUI:
 
     def main():
-        st.header("perquisar pratos")
-        termo = st.text_input("Buscar")
+        st.header("Pesquisar pratos")
+        termo = st.text_input("Buscar prato")
 
-        if termo == "":
+        if termo.strip() == "":
             return
 
         resultado = []
 
-        for m in View.mesa_listar():
-            if termo.lower() in str(m.get_numero()):
-                resultado.append({"Tipo": "Mesa", "Valor": m.get_numero()})
-
         for p in View.prato_listar():
             if termo.lower() in p.get_nome().lower():
-                resultado.append({"Tipo": "Prato", "Valor": p.get_nome()})
+                resultado.append({
+                    "Nome": p.get_nome(),
+                    "Preço": p.get_preco()
+                })
 
-        for ped in View.pedido_listar():
-            if termo in str(ped.get_id()):
-                resultado.append({"Tipo": "Pedido", "Valor": ped.get_id()})
-
-        if len(resultado) == 0:
-            st.write("Nenhum resultado encontrado")
+        if not resultado:
+            st.write("Nenhum prato encontrado")
         else:
             st.dataframe(pd.DataFrame(resultado), hide_index=True)
